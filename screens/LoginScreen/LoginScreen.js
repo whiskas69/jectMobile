@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     resizeMode: 'cover',
-    marginTop: '40%',
+    marginTop: '30%',
     marginBottom: '5%'
   },
   searchSection: {
