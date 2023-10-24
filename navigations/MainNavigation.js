@@ -12,6 +12,10 @@ import HomeScreen from "../screens/MainScreen/HomeScreen";
 import Recommend from "../screens/RestaurantScreen/RecommendScreen"
 import Interest from "../screens/RestaurantScreen/InterestScreen";
 import New from "../screens/RestaurantScreen/NewScreen";
+import ProfileSceen from "../screens/ProfileScreen/ProfileScreen";
+import ReviewHistoryScreen from "../screens/ProfileScreen/ReviewHisScreen"
+import EditProfileScreen from "../screens/ProfileScreen/EditProfileScreen"
+import ChangPassword from "../screens/ProfileScreen/ChangePasswordScreen"
 
 import Test from "../screens/test";
 
@@ -50,8 +54,8 @@ function LoginNavigation() {
                     options={{ headerShown: false }}
                 />
                 <LoginNavigator.Screen
-                    name="Main"
-                    component={HomeScreen}
+                    name="Profile"
+                    component={ProfileNavigation}
                 />
             </LoginNavigator.Navigator>
         </NavigationContainer>
@@ -151,7 +155,7 @@ function ProfileNavigation() {
         >
             <ProfileNavigator.Screen
                 name="Profile"
-                component={Profile}
+                component={ProfileSceen}
                 options={{
                     title: "ฉัน"
                 }} />

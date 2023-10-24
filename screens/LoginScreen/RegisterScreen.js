@@ -24,7 +24,7 @@ const RegistrationScreen = () => {
 
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        navigation.replace("Main")
+        navigation.replace("Profile")
 
       }
     })
