@@ -16,8 +16,7 @@ import ProfileSceen from "../screens/ProfileScreen/ProfileScreen";
 import ReviewHistoryScreen from "../screens/ProfileScreen/ReviewHisScreen"
 import EditProfileScreen from "../screens/ProfileScreen/EditProfileScreen"
 import ChangPassword from "../screens/ProfileScreen/ChangePasswordScreen"
-
-import Test from "../screens/test";
+import DetailSceen from "../screens/MainScreen/Detail";
 
 const HomeNavigator = createNativeStackNavigator();
 const CategoryNavigator = createNativeStackNavigator();
@@ -54,8 +53,8 @@ function LoginNavigation() {
                     options={{ headerShown: false }}
                 />
                 <LoginNavigator.Screen
-                    name="Profile"
-                    component={ProfileNavigation}
+                    name="Bottom"
+                    component={BottomNavigation}
                 />
             </LoginNavigator.Navigator>
         </NavigationContainer>
@@ -95,12 +94,12 @@ function HomeNavigation() {
                 options={{
                     title: "ร้านอาหารใหม่"
                 }} />
-            {/* <HomeNavigator.Screen
+            <HomeNavigator.Screen
                 name="Detail"
-                component={Detail}
+                component={DetailSceen}
                 options={{
                     title: "Detail"
-                }} /> */}
+                }} />
         </HomeNavigator.Navigator>
     );
 }

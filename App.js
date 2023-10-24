@@ -2,10 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
 import MainNavigatoion from './navigations/MainNavigation';
+import HomeScreen from './screens/MainScreen/HomeScreen';
 
 export default function App() {
   return (
     <MainNavigatoion/>
+    // <HomeScreen/>
   );
 }
 
