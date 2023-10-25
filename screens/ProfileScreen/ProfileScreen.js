@@ -55,7 +55,7 @@ const ProfileSceen = ({ navigation }) => {
                 {data.profile ? (
                     <Image
                         source={{ uri: data.profile }}
-                        style={{ width: 80, height: 80, marginLeft: 20, }}
+                        style={{ width: 80, height: 80, marginLeft: 20, borderRadius:100 }}
                     />
                 ) : null}
 

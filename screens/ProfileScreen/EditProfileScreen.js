@@ -1,14 +1,12 @@
-// import React, { useState, useEffect } from 'react';
 import React, { useEffect, useState } from "react";
-// import { AntDesign } from "@expo/vector-icons";
-import { StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, Alert, Button, ScrollView } from 'react-native';
-import { firebase, auth, storage } from '../../database/firebaseDB';
+import { StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, Alert, Input, ScrollView } from 'react-native';
+import { firebase, storage } from '../../database/firebaseDB';
 import * as ImagePicker from 'expo-image-picker';
-import { uploadBytesResumable, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { collection, query, where, doc, getDoc, updateDoc, deleteDoc, } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { doc, updateDoc, } from "firebase/firestore";
 
-const SettingAccount = ({ navigation }) => {
-  console.log("############################### editUser page ###############################")
+const EditUser = ({ navigation }) => {
+    console.log("############################### editUser page ###############################")
     const [id, setid] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -72,10 +70,7 @@ const SettingAccount = ({ navigation }) => {
 
     console.log("setProfile", profile)
 
-    
-
-
-    console.log("data 3 ????", data);
+    console.log("data ::::::", data);
     const updateUser = async () => {
         console.log(id)
         const blob = await fetch(profile.uri).then((response) => response.blob());
@@ -91,11 +86,11 @@ const SettingAccount = ({ navigation }) => {
                 id: id,
                 username: username,
                 email: email,
-                // profile: downloadURL
+                profile: downloadURL
             });
-            // await user.updateProfile({
-            //   profile: downloadURL,
-            // });
+            await user.updateProfile({
+                profile: downloadURL,
+            });
             console.log("อัปเดตข้อมูลเรียบร้อยแล้ว");
             Alert.alert(
                 "Update Success",
@@ -113,17 +108,24 @@ const SettingAccount = ({ navigation }) => {
             console.error("เกิดข้อผิดพลาดในการอัปเดตข้อมูล:", e);
         }
     };
-    // console.log("photoURL:",user.photoURL)
-    console.log("photoURL:", user?.photoURL || null);
     return (
         <ScrollView style={{ height: '100%', backgroundColor: 'white' }}>
             <View style={styles.container}>
-                {/* <Text style={[styles.title, { marginBottom: 10 }]}> Setting </Text> */}
-                <Text style={[styles.label, { textAlign: 'center' }]}>Account</Text>
-                <TextInput style={styles.input} placeholder='Username'
+            <ImageBackground
+                        source={profile ? { uri: profile.uri } : null}
+                        style={{ resizeMode: 'cover', marginLeft: 20, marginTop: 150, width: 200, height: 200, }}
+                        // style={styles.backgroundImage}
+                        >
+                        <TouchableOpacity style={[styles.selectImage, { marginTop: 20, marginBottom: 10 }]}onPress={pickImage}></TouchableOpacity>
+                    </ImageBackground>
+
+                    <Text style={{ color: "#176B87", fontSize: 16, marginTop: 20, marginBottom: 20 }}>คลิกที่รูปเพื่อแก้ไข</Text>
+                
+             
+            <TextInput style={styles.input} placeholder='Username'
                     value={username}
                     onChangeText={(val) => setUsername(val)} />
-
+                
                 <TextInput
                     multiline
                     style={[styles.input,]}
@@ -132,17 +134,8 @@ const SettingAccount = ({ navigation }) => {
                     onChangeText={(val) => setEmail(val)}
                     editable={false} />
 
-                <Text style={styles.label}> Profile Picture </Text>
-                <ImageBackground
-                    source={profile ? { uri: profile.uri } : null}
-                    style={styles.backgroundImage}
-                >
-                    <TouchableOpacity style={[styles.selectImage, { marginTop: 20, marginBottom: 10 }]}
-                        onPress={pickImage}>
-                    </TouchableOpacity>
-                </ImageBackground>
-                <TouchableOpacity style={[styles.button, { marginTop: 20, marginBottom: 10, width: '40%' }]} onPress={updateUser}>
-                    <Text style={styles.buttonText}>CONFIRM</Text>
+                <TouchableOpacity style={styles.confirm} onPress={updateUser}>
+                    <Text style={styles.buttonText}>ยืนยัน</Text>
                 </TouchableOpacity>
 
             </View>
@@ -157,105 +150,24 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
-        // paddingVertical: responsiveHeight(5)
-        // margin: 5,
-    },
-    logo: {
-        // width: responsiveWidth(40),
-        // height: responsiveHeight(20),
-        borderRadius: 100,
+        backgroundColor: "#F4EEEE",
     },
     input: {
         fontSize: 18,
-        borderBottomColor: "#262B46",
-        backgroundColor: '#F6F7F9',
         width: "80%",
-        borderBottomWidth: 2,
-        borderRadius: 5,
+        borderBottomWidth: 1,
         padding: 5,
         paddingVertical: 10,
         marginBottom: 15,
     },
-    title: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        fontFamily: 'Anuphan'
-    },
-    label: {
-        fontSize: 20,
-        fontWeight: '600',
-        width: '80%',
-        marginBottom: 10,
-        fontFamily: 'Anuphan'
-    },
-    button: {
-        backgroundColor: '#8667F2',
-        borderRadius: 50,
-        padding: 10,
+    confirm: {
+        backgroundColor: "#FFDBAA",
+        marginTop: 400,
+        height: 50,
+        width: '90%',
+        borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: 'bold',
-        letterSpacing: 1,
-        fontSize: 20
-    },
-    dropdown: {
-        height: 50,
-        borderColor: 'gray',
-        borderWidth: 0.5,
-        borderRadius: 8,
-        paddingHorizontal: 8,
-        width: '80%'
-    },
-    icon: {
-        marginRight: 5,
-    },
-    placeholderStyle: {
-        fontSize: 16,
-        fontFamily: 'Anuphan'
-    },
-    selectedTextStyle: {
-        fontSize: 16,
-        fontFamily: 'Anuphan'
-    },
-    iconStyle: {
-        width: 20,
-        height: 20,
-    },
-    inputSearchStyle: {
-        height: 40,
-        fontSize: 16,
-        fontFamily: 'Anuphan'
-    },
-    dropdown: {
-        height: 50,
-        borderColor: 'gray',
-        borderWidth: 0.5,
-        borderRadius: 8,
-        paddingHorizontal: 8,
-        width: '80%'
-    },
-    icon: {
-        marginRight: 5,
-    },
-    placeholderStyle: {
-        fontSize: 16,
-        fontFamily: 'Anuphan'
-    },
-    selectedTextStyle: {
-        fontSize: 16,
-        fontFamily: 'Anuphan'
-    },
-    iconStyle: {
-        width: 20,
-        height: 20,
-    },
-    inputSearchStyle: {
-        height: 40,
-        fontSize: 16,
-        fontFamily: 'Anuphan'
     },
     selectImage: {
         padding: 50,
@@ -264,13 +176,12 @@ const styles = StyleSheet.create({
     },
     backgroundImage: {
         flex: 1,
-        // width: responsiveWidth(80),
+        width: '100%',
         height: '100%',
         resizeMode: 'cover',
-        justifyContent: 'center',
     },
 });
 
 
-export default SettingAccount;
+export default EditUser;
 
