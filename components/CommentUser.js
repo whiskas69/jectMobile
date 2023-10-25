@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'rea
 import { AntDesign } from "@expo/vector-icons";
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 
-const comment = ({props,navigation}) => {
+const comment = (props) => {
     
     const starIcons = [];
   
