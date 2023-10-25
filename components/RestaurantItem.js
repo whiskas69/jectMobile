@@ -1,22 +1,22 @@
 import React from "react";
 import { Alert ,View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
-const RestaurantItem = ({ list }) => {
+const RestaurantItem = (props) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.cardContainer}>
                 <View style={styles.card}>
                     <View style={styles.Imagebox}>
-                        <Image source={{ uri: list.picture }}
+                        <Image source={{ uri: props.pic }}
                             style={styles.Image}
                         />
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
                         <View style={styles.maintext}>
-                            <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 10 }}>{list.name}</Text>
-                            <Text style={{ fontSize: 13, color: 'gray', marginLeft: 10 }}>{list.category_name}</Text>
+                            <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 10 }}>{props.title}</Text>
+                            <Text style={{ fontSize: 13, color: 'gray', marginLeft: 10 }}>{props.category_name}</Text>
                         </View>
-                        <Text style={{ fontSize: 15, height: 30, width: 60, alignItems: 'center' }}>{list.review} รีวิว</Text>
+                        <Text style={{ fontSize: 15, height: 30, width: 60, alignItems: 'center' }}>{props.review} รีวิว</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -27,7 +27,7 @@ const RestaurantItem = ({ list }) => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'column',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
     },
     card: {
         width: 370,
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover'
     },
     cardContainer: {
-        marginLeft: 12,
+        // marginLeft: 12,
         marginBottom: 10
     }
 });
