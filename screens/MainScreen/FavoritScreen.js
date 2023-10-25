@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet, ScrollView } from "react-native";
-import firebase from "../../database/firebaseDB";
+import { firebase, auth, firestore } from "../../database/firebaseDB";
 
 import RestaurantItem from "../../components/RestaurantfavItem ";
 

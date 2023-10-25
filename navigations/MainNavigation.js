@@ -20,6 +20,7 @@ import DetailSceen from "../screens/MainScreen/Detail";
 import Categories from "../screens/MainScreen/CategoryScreen";
 import CateDetailScreen from "../screens/MainScreen/CategoryDetail";
 import AddRestScreen from "../screens/ProfileScreen/AddRestScreen";
+import FavoriteSceen from "../screens/MainScreen/FavoritScreen"
 
 const HomeNavigator = createNativeStackNavigator();
 const CategoryNavigator = createNativeStackNavigator();
@@ -143,7 +144,7 @@ function FavoriteNavigation() {
             }}>
             <FavoriteNavigator.Screen
                 name="Favorite"
-                component={Favorite}
+                component={FavoriteSceen}
                 options={{
                     title: "ร้านที่ชื่นชอบ"
                 }} />
