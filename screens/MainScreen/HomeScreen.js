@@ -1,20 +1,21 @@
-import { StyleSheet, Text, View, Image, TextInput, FlatList, ScrollView, TouchableOpacity } from 'react-native';
-
-import { AntDesign } from "@expo/vector-icons";
 import React, { useState, useEffect } from 'react';
-import { firebase, auth, firestore } from '../../database/firebaseDB';
-import { collection, query, where, getDocs, QuerySnapshot, onSnapshot } from 'firebase/firestore';
+import { StyleSheet, Text, View, Image, TextInput, FlatList, ScrollView, Button, TouchableOpacity } from 'react-native';
+import { AntDesign } from "@expo/vector-icons";
 
+import { firebase, auth, firestore } from '../../database/firebaseDB';
+import { collection, query, orderBy, getDocs, QuerySnapshot, onSnapshot } from 'firebase/firestore';
 
 import ShowProduct from '../../components/ShowProduct';
 import Carousel from '../../components/RestaurantCarousel';
 
 const HomeScreen = ({ navigation, route }, props) => {
-
-    // const [restaurantData, setrestaurantData] = useState([]);
     const [categoryData, setCategoryData] = useState("");
+    const [datarec, setDatarec] = useState("");
+    const [datanew, setDatanew] = useState("");
+    const [datasort, setDatasort] = useState("");
     const [cate, setCate] = useState("");
     const [searchText, setSearchText] = useState('');
+    const [showView, setShowView] = useState(false);
 
     //search
     const SearchData = async () => {
@@ -30,7 +31,6 @@ const HomeScreen = ({ navigation, route }, props) => {
             if (restaurant === cate) {
 
                 const dataPro = querySnapshot.docs[i].data();
-
                 const dataAll = {
                     name: dataPro.name,
                     id: querySnapshot.docs[i].id,
@@ -45,7 +45,6 @@ const HomeScreen = ({ navigation, route }, props) => {
 
             else {
                 const dataPro = querySnapshot.docs[i].data();
-
                 const dataAll = {
                     name: dataPro.name,
                     id: querySnapshot.docs[i].id,
@@ -55,15 +54,12 @@ const HomeScreen = ({ navigation, route }, props) => {
                     review: dataPro.review,
                     telephone: dataPro.telephone,
                 }
-
                 restaurantAll.push(dataAll)
             }
-
         }
 
 
         if (restaurantAll.length == querySnapshot.size) {
-
             const filteredData = restaurantAll.filter(item =>
                 item.name.toLowerCase().includes(searchText.toLowerCase())
             );
@@ -76,12 +72,22 @@ const HomeScreen = ({ navigation, route }, props) => {
             );
             setCategoryData(filteredData)
         }
+
+        console.log('filter', categoryData);
+        console.log('searchtext', searchText)
+
+        if (categoryData == "" || searchText == "") {
+            console.log("1")
+            setShowView(false);
+        } else if (categoryData != "") {
+            setShowView(true);
+            console.log("2")
+        }
     }
 
     useEffect(() => {
 
-        const q = query(collection(firebase.firestore(), 'Restaurant'));
-
+        const q = query(collection(firebase.firestore(), 'Restaurant'), orderBy('review', 'desc'));
         // Create a real-time listener to fetch and update data
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const restaurantData = [];
@@ -106,15 +112,79 @@ const HomeScreen = ({ navigation, route }, props) => {
             });
 
             if (restaurantAll.length === snapshot.size) {
-                setCategoryData(restaurantAll);
+                setDatarec(restaurantAll);
             } else {
-                setCategoryData(restaurantData);
+                setDatarec(restaurantData);
+            }
+        });
+
+        const m = query(collection(firebase.firestore(), 'Restaurant'));
+        // Create a real-time listener to fetch and update data
+        const unsubscribe2 = onSnapshot(m, (snapshot) => {
+            const restaurantData = [];
+            const restaurantAll = [];
+
+            snapshot.forEach((doc) => {
+                const dataPro = doc.data();
+                const dataAll = {
+                    name: dataPro.name,
+                    id: doc.id,
+                    detail: dataPro.detail,
+                    picture: dataPro.picture,
+                    rating: dataPro.rating,
+                    review: dataPro.review,
+                    telephone: dataPro.telephone
+                };
+                if (dataPro.category === cate) {
+                    restaurantData.push(dataAll);
+                } else {
+                    restaurantAll.push(dataAll);
+                }
+            });
+
+            if (restaurantAll.length === snapshot.size) {
+                setDatanew(restaurantAll);
+            } else {
+                setDatanew(restaurantData);
+            }
+        });
+
+        const n = query(collection(firebase.firestore(), 'Restaurant'), orderBy('name', 'asc'));
+        // Create a real-time listener to fetch and update data
+        const unsubscribe3 = onSnapshot(n, (snapshot) => {
+            const restaurantData = [];
+            const restaurantAll = [];
+
+            snapshot.forEach((doc) => {
+                const dataPro = doc.data();
+                const dataAll = {
+                    name: dataPro.name,
+                    id: doc.id,
+                    detail: dataPro.detail,
+                    picture: dataPro.picture,
+                    rating: dataPro.rating,
+                    review: dataPro.review,
+                    telephone: dataPro.telephone
+                };
+                if (dataPro.category === cate) {
+                    restaurantData.push(dataAll);
+                } else {
+                    restaurantAll.push(dataAll);
+                }
+            });
+
+            if (restaurantAll.length === snapshot.size) {
+                setDatasort(restaurantAll);
+            } else {
+                setDatasort(restaurantData);
             }
         });
 
         return () => {
             // Unsubscribe from the real-time listener when the component unmounts
             unsubscribe();
+            unsubscribe2();
+            unsubscribe3();
         };
 
     }, [cate])
@@ -122,68 +192,74 @@ const HomeScreen = ({ navigation, route }, props) => {
 
     const renderedItem = (itemData) => {
         return (
+            <Carousel
+                title={itemData.item.name}
+                pic={itemData.item.picture}
+                review={itemData.item.review}
+
+                onSelectProduct={() => {
+                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review });
+                }}
+            />
+        );
+    }
+
+    const rendersearch = (itemData) => {
+        return (
             <ShowProduct
                 title={itemData.item.name}
                 pic={itemData.item.picture}
                 review={itemData.item.review}
 
                 onSelectProduct={() => {
-                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review }, setCate(""));
+                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review });
                 }}
             />
-        );
+        )
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.input} >
-                <TextInput style={{ width: '100%' }} placeholder="Search" onChangeText={text => setSearchText(text)} value={searchText} />
-
+                <TextInput style={{ width: '100%' }} placeholder="ค้นหา" onChangeText={text => setSearchText(text)} value={searchText} />
                 <AntDesign style={styles.searchIcon} name="search1" size={26} color={'gray'} onPress={() => SearchData(cate)} />
-
             </View>
-            {/* <AntDesign style={{ position: 'absolute', right: 5, top: 15 }} name="notification" size={26} color={'gray'} /> */}
             <ScrollView>
-                <Text style={[styles.title]}>Categories</Text>
+                {showView && ( // สร้าง View จาก showView ถ้าค่าเป็น true
+                    <FlatList
+                        data={categoryData}
+                        renderItem={rendersearch}
+                    />
+                )}
 
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ height: 100 }}>
-                    <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                        <TouchableOpacity style={styles.cat} onPress={() => setCate("")}>
-                            <Image source={require('../../assets/all-2.png')} style={[styles.catagory,]} />
-                            <Text style={styles.catTitle}>ALL</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.cat} onPress={() => setCate("food")}>
-                            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2819/2819194.png' }} style={[styles.catagory,]} />
-                            <Text style={styles.catTitle}>FOOD</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.cat} onPress={() => setCate("clothes")}>
-                            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/3300/3300371.png' }} style={styles.catagory} />
-                            <Text style={styles.catTitle}>CLOTHES</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.cat} onPress={() => setCate("accessory")}>
-                            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/7695/7695930.png' }} style={styles.catagory} />
-                            <Text style={styles.catTitle}>ACCESSORY</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.cat} onPress={() => setCate("model")}>
-                            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/6967/6967594.png' }} style={styles.catagory} />
-                            <Text style={styles.catTitle}>MODEL</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.cat} onPress={() => setCate("other")}>
-                            <Image source={{ uri: 'https://icon-library.com/images/others-icon/others-icon-20.jpg' }} style={styles.catagory} />
-                            <Text style={styles.catTitle}>OTHERS</Text>
-                        </TouchableOpacity>
-                    </View>
+                <Text style={styles.textmain} onPress={() => { navigation.navigate("Recommend") }} >ร้านอาหารยอดนิยม {'>'}</Text>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <FlatList
+                        data={datarec}
+                        renderItem={renderedItem}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    />
                 </ScrollView>
-
-                <Text style={[styles.title ]}>Recommend</Text>
-
-
-                <FlatList
-                    data={categoryData}
-                    renderItem={renderedItem}
-                    numColumns={2}
-                />
-
+                <Text style={styles.textmain} onPress={() => { navigation.navigate("New") }} >ร้านอาหารใหม่ {'>'}</Text>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <FlatList
+                        data={datanew}
+                        renderItem={renderedItem}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    />
+                </ScrollView>
+                {/* datasort */}
+                <Text style={styles.textmain} onPress={() => { navigation.navigate("Interest") }} >ร้านอาหารตามตัวอักษร {'>'}</Text>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <FlatList
+                        data={datasort}
+                        renderItem={renderedItem}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    />
+                </ScrollView>
             </ScrollView>
         </View>
     );
@@ -192,25 +268,30 @@ const HomeScreen = ({ navigation, route }, props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        marginHorizontal: 5,
+        backgroundColor: '#F4EEEE',
+        marginRight: 10,
+        marginLeft: 10
+    },
+    textmain: {
+        marginLeft: 20,
+        marginTop: 10,
+        marginBottom: 10,
+        fontSize: 20
     },
     cat: {
         alignItems: 'center',
         marginRight: 10
     },
     input: {
-        borderColor: "gray",
-        width: "90%",
-        borderWidth: 1,
-        borderRadius: 10,
+        // borderColor: "gray",
+        width: "100%",
+        // borderWidth: 1,
+        borderRadius: 20,
         marginVertical: 10,
         padding: 10,
         flexDirection: 'row',
+        backgroundColor: '#D9D9D9',
         alignItems: 'center',
-        backgroundColor: '#fff',
-        justifyContent: 'center',
-        alignItems: 'center'
     },
     searchIcon: {
         padding: 5,

@@ -4,14 +4,14 @@ import { Text, View, Image, StyleSheet, TouchableOpacity, FlatList } from "react
 
 const Carousel = (props) => {
     return (
-        <TouchableOpacity style={{ marginLeft: 10, marginRight: 10 }}>
+        <TouchableOpacity style={{ marginLeft: 5, marginRight: 5 }} onPress={props.onSelectProduct}>
             <View style={styles.card}>
                 <View style={styles.imageBox}>
-                    <Image source={{ uri: props.picture }} style={styles.image} />
+                    <Image source={{ uri: props.pic }} style={styles.image} />
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, flexWrap: 'wrap' }}>
                     <View style={styles.maintext}>
-                        <Text style={{ fontSize: 12, fontWeight: 'bold', marginLeft: 10 }}>{props.name}</Text>
+                        <Text style={{ fontSize: 12, fontWeight: 'bold', marginLeft: 10 }}>{props.title}</Text>
                         <Text style={{ fontSize: 11, color: 'gray', marginLeft: 10 }}>list.category_name</Text>
                     </View>
                     <Text style={styles.review}>{props.review} รีวิว</Text>

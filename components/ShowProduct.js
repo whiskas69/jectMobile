@@ -5,55 +5,21 @@ import React, { useState, useEffect } from 'react';
 import { AntDesign } from "@expo/vector-icons";
 import { responsiveHeight } from "react-native-responsive-dimensions";
 const ShowProduct = (props) => {
-    // console.log("-----")
-    // console.log(props)
-    // console.log("-----")
-    const starIcons = [];
-
-
-    // Use a for loop to generate the star icons
-    for (let i = 0; i < 5; i++) {
-
-        if (i < props.rating) {
-            starIcons.push(
-                <AntDesign key={i} name="star" size={16} color="orange" />
-
-            );
-
-        }
-
-        else {
-            starIcons.push(
-                <AntDesign key={i} name="star" size={16} color="grey" />
-
-            )
-        }
-    }
-
-
-    // console.log
     return (
-        <View style={{ maxWidth: '50%', minWidth: '50%' }}>
-            <ScrollView>
-                {/* <TouchableOpacity style={{ height: 400, }}> */}
-                <TouchableOpacity style={{ height: 260, }} onPress={props.onSelectProduct}>
-                    <Image source={{ uri: props.pic }} style={styles.product} />
-                    <View>
-                        <Text style={styles.catTitle} numberOfLines={1}> {props.title}</Text>
-                        <View style={{ flexDirection: 'row', marginTop: 5 }}>
-                            {starIcons}
-                            <Text style={{
-                                fontSize: 16, bottom: 0,
-                                fontFamily: 'Anuphan'
-                            }}> ({props.rating}) </Text>
-                        </View>
+        <View style={styles.card}>
+            <TouchableOpacity style={{ height: 260, flexDirection: "row", }} onPress={props.onSelectProduct}>
+                <Image source={{ uri: props.pic }} style={styles.product} />
+                <View>
+                    <Text style={styles.catTitle} numberOfLines={2}> {props.title}</Text>
+                    <View style={{ flexDirection: 'row', marginTop: 5 }}>
                         <Text style={{
-                            fontSize: 20, fontWeight: 'bold', color: "black",
-                            fontFamily: 'Anuphan'
-                        }}> {props.price} บาท </Text>
+                            fontSize: 16, bottom: -50, position: "absolute"
+                        }}> list.category_name </Text>
+
+                        <Text style={styles.review}>{props.review} รีวิว</Text>
                     </View>
-                </TouchableOpacity>
-            </ScrollView>
+                </View>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -63,21 +29,33 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        // margin: 10,
         paddingTop: 30
     },
+    card: {
+        maxWidth: "100%",
+        minWidth: '100%',
+        backgroundColor: "#fff",
+        maxHeight: 100,
+        minHeight: 100,
+        borderRadius: 20
+    },
     catTitle: {
+        marginTop: 10,
         fontSize: 20,
-        fontWeight: 'light',
-        fontFamily: 'Anuphan'
+        fontWeight: 'bold',
     },
     product: {
-        width: "95%",
-        height: responsiveHeight(20),
-        borderRadius: 10,
-
+        width: "40%",
+        height: 100,
+        borderTopLeftRadius: 20,
+        borderBottomLeftRadius: 20,
+        resizeMode: "cover"
+    },
+    review: {
+        fontSize: 11,
+        position: 'absolute',
+        right: -40,
+        bottom: -48
     }
 });
 

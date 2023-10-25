@@ -87,7 +87,7 @@ function HomeNavigation() {
                 name="Interest"
                 component={Interest}
                 options={{
-                    title: "ร้านอาหารน่าสนใจ"
+                    title: "ร้านอาหารตามตัวอักษร"
                 }} />
             <HomeNavigator.Screen
                 name="New"
