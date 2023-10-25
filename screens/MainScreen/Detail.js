@@ -10,7 +10,7 @@ import Buttonseecomment from '../../components/Buttonseecomment';
 import { Button, Input } from "react-native-elements";
 import { collection, query, where, getDocs, addDoc, onSnapshot, orderBy } from 'firebase/firestore';
 
-import comment from "../../components/comment";
+import comment from "../../components/comments";
 
 const DetailScreen = ({ navigation, route }) => {
     console.log('15 route', route);
@@ -18,7 +18,6 @@ const DetailScreen = ({ navigation, route }) => {
     const [getComments, setComments] = useState([]);
     const [productId, setProductId] = useState(route.params.id);
     const [store, setStore] = useState([]);
-    const [isSoldOut, setIsSoldOut] = useState(true); // Set isSoldOut to true when sold out
 
     const getStore = async () => {
         console.log("mail", route.params.mail)
@@ -28,18 +27,6 @@ const DetailScreen = ({ navigation, route }) => {
         setStore(userData)
 
     };
-
-    // console.log('store', store?.name);
-
-
-    var purchasedAmount = 0;
-    const [buy, setBuy] = useState(true)
-    // const [purchasedAmount, setPurchasedAmount] = useState(0)
-    // console.log("product id", productId)
-
-    const [amount, setAmount] = useState(0);
-    // const amount = 0
-
 
     const [defaultRating, setdefaultRating] = useState(1);
     const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5])
@@ -238,19 +225,6 @@ const DetailScreen = ({ navigation, route }) => {
             const q = query(collection(firebase.firestore(), 'purchased'), where('productId', '==', route.params?.id));
             const querySnapshot = await getDocs(q);
 
-            let purchasedAmount = 0; // Initialize purchasedAmount
-
-            const purchased = querySnapshot.docs;
-            console.log("userData", purchased);
-            for (let purData of purchased) {
-                console.log("each purchase", purData.data().amount);
-                purchasedAmount += purData.data().amount;
-                console.log("purchasedAmount", purchasedAmount);
-                if (purchasedAmount >= amount) {
-                    setBuy(false);
-                }
-            }
-
             const amountDoc = await getDoc(productRef);
             // const amount = amountDoc.data().amount
             console.log("test set set");
@@ -300,10 +274,10 @@ const DetailScreen = ({ navigation, route }) => {
                 </View>
                 <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold', marginTop: 5 }}> {route.params.price} Baht</Text>
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={[
                         styles.button,
-                        { backgroundColor: purchasedAmount >= amount ? '#ccc' : '#9276F2' }
+                        // { backgroundColor: purchasedAmount >= amount ? '#ccc' : '#9276F2' }
                     ]}
                     onPress={() => {
                         if (purchasedAmount >= amount) {
@@ -317,7 +291,7 @@ const DetailScreen = ({ navigation, route }) => {
                     <Text style={styles.buttonText}>
                         {purchasedAmount >= amount ? 'Sold Out' : 'Buy'}
                     </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
             </View>
 
