@@ -113,10 +113,10 @@ const EditUser = ({ navigation }) => {
             <View style={styles.container}>
             <ImageBackground
                         source={profile ? { uri: profile.uri } : null}
-                        style={{ resizeMode: 'cover', marginLeft: 20, marginTop: 150, width: 200, height: 200, }}
+                        style={{ resizeMode: 'cover', marginLeft: 20, marginTop: 150, width: 200, height: 200,  }}
                         // style={styles.backgroundImage}
                         >
-                        <TouchableOpacity style={[styles.selectImage, { marginTop: 20, marginBottom: 10 }]}onPress={pickImage}></TouchableOpacity>
+                        <TouchableOpacity style={[styles.selectImage, { marginTop: 20, marginBottom: 10, }]}onPress={pickImage}></TouchableOpacity>
                     </ImageBackground>
 
                     <Text style={{ color: "#176B87", fontSize: 16, marginTop: 20, marginBottom: 20 }}>คลิกที่รูปเพื่อแก้ไข</Text>
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     },
     confirm: {
         backgroundColor: "#FFDBAA",
-        marginTop: 400,
+        marginTop: 100,
         height: 50,
         width: '90%',
         borderRadius: 10,
