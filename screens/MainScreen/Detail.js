@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
-import { StyleSheet, Text, View, Image, TextInput, FlatList, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, FlatList, ScrollView, TouchableOpacity, Pressable } from 'react-native';
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 import { FontAwesome, Fontisto } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
@@ -190,6 +190,7 @@ const DetailScreen = ({ navigation, route }) => {
             }
 
             route.params.rating = meanRate;
+            route.params.review = num;
 
 
         });
@@ -283,33 +284,20 @@ const DetailScreen = ({ navigation, route }) => {
                 <Text style={{ fontWeight: "bold", marginTop: 10 }}>รายละเอียด</Text>
                 <Text style={{ marginTop: 10 }}>{route.params.detail}</Text>
                 <Text>โทร : {route.params.telephone} </Text>
-                <></>
 
-                <View style={{ marginHorizontal: 20 }}>
-                    <Text style={styles.header}>Description</Text>
-                    <Text style={styles.content}>
+                <Text style={styles.menurec}>ตัวอย่างมนู {'>'}</Text>
 
-                        {route.params.detail}
-                    </Text>
-                </View>
                 <View style={{ borderTopWidth: 1, borderColor: 'gray', marginTop: 20, marginHorizontal: 20 }}>
-                    <Text style={[styles.header,]}>Condition</Text>
-                    <Text style={[styles.content,]}>
-
-                        {route.params.policy}
-                    </Text>
                 </View>
 
+                <Text style={styles.comment}>เพิ่มความคิดเห็น</Text>
 
                 {/* comments */}
 
-                <View style={{ marginTop: 30 }}>
-                    <Text style={[styles.header, { fontSize: 20, fontWeight: '200' }]}>Comments</Text>
+                <View style={styles.addComment}>
                     <CustomRatingBar />
-                    {/* <Text style={{ textAlign: 'center' }}>{defaultRating + '/' + maxRating.length}</Text> */}
 
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
-
+                    <View>
                         <TextInput style={[styles.input, {
                             flex: 1,
                             shadowColor: "#000",
@@ -325,11 +313,19 @@ const DetailScreen = ({ navigation, route }) => {
                             multiline
                             numberOfLines={3}
                             maxLength={100000}
-                            placeholder='Feedback'
+                            placeholder='พิมพ์ความคิดเห็นที่นี้'
                             onChangeText={text => setAddComment(text)} value={addComment} />
-                        <TouchableOpacity style={{ alignItems: 'flex-end', marginRight: 20 }} onPress={AddComment} disabled={addComment == ""}>
+
+                        <View style={{ justifyContent: "center", alignItems: "center" }}>
+                            <Pressable style={styles.submit} onPress={AddComment} disabled={addComment == ""}>
+                                {/* ใส่ onPress={onPress} ใน Pressable*/}
+                                <Text>ส่งความคิดเห็น</Text>
+                            </Pressable>
+                        </View>
+
+                        {/* <TouchableOpacity style={{ alignItems: 'flex-end', marginRight: 20 }} onPress={AddComment} disabled={addComment == ""}>
                             <Image source={require("../../assets/send.png")} style={{ width: 30, height: 30 }} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
 
                 </View>
@@ -351,8 +347,8 @@ const DetailScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingLeft: 15,
+        paddingRight: 15,
         paddingTop: 10,
         backgroundColor: "#F4EEEE",
     },
@@ -386,22 +382,6 @@ const styles = StyleSheet.create({
         gap: 10,
         alignItems: "center"
     },
-    button: {
-        position: 'absolute',
-        right: 0,
-        bottom: 0,
-        width: '20%',
-        backgroundColor: '#9276F2',
-        paddingVertical: 10
-    },
-    buttonText: {
-        fontSize: 30,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        color: '#fff',
-        fontFamily: 'Anuphan'
-
-    },
     input: {
         borderColor: "gray",
         width: "90%",
@@ -414,53 +394,47 @@ const styles = StyleSheet.create({
         marginHorizontal: '5%',
         fontFamily: 'Anuphan'
     },
-    title: {
-        fontSize: 30,
-        fontWeight: 'light',
-        textAlign: 'left',
-        fontFamily: 'Anuphan',
-        justifyContent: 'space-between',
-    },
-    header: {
-        paddingHorizontal: 10,
-        fontSize: 20,
-        fontWeight: 'bold',
-        textAlign: 'left',
-        marginTop: 20,
-        marginBottom: 10,
-        fontFamily: 'Anuphan',
-        // marginHorizontal: 20
-    },
-    content: {
-        paddingHorizontal: 10,
-        fontSize: 16,
-        fontWeight: 'light',
-        textAlign: 'left',
-        lineHeight: 20,
-        fontFamily: 'Anuphan',
-
-    },
-    account: {
-        width: responsiveWidth(10),
-        height: responsiveWidth(10),
-        borderRadius: 50,
-        marginLeft: 20,
-    },
     customRatingBarStyle: {
-        justifyContent: 'center',
+        marginLeft: 20,
+        marginBottom: 10,
         flexDirection: 'row',
 
     },
     starImgStyle: {
-        width: 30,
-        height: 30,
+        width: 25,
+        height: 25,
         resizeMode: 'cover'
     },
-    seperator: {
-        alignSelf: 'center',
-        height: 1,
-        width: '95%',
-        backgroundColor: '#ddd'
+    name: {
+        fontWeight: 'bold',
+        marginTop: 10,
+        fontSize: 20
+    },
+    menurec: {
+        fontSize: 15,
+        marginTop: 10,
+        marginBottom: 10,
+        fontWeight: "bold"
+    },
+    comment: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        marginVertical: 10,
+    },
+    addComment: {
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 10,
+        width: "100%",
+    },
+    submit: {
+        backgroundColor: "#FFDBAA",
+        borderRadius: 10,
+        width: "90%",
+        height: 30,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 15,
     }
 });
 
