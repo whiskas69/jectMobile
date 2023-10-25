@@ -1,195 +1,241 @@
-import React, { Component } from "react";
-import { Text, View, StyleSheet, Button, ScrollView, TouchableOpacity, Image } from "react-native";
-import {firebase} from "../../database/firebaseDB"
-import { ListItem } from "react-native-elements";
-import { useFonts, Kodchasan_400Regular } from '@expo-google-fonts/kodchasan';
+import { StyleSheet, Text, View, Image, TextInput, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 
-import Searchbar from "../../components/Searchbar";
-import Buttonlocation from "../../components/Buttonlocation";
+import { AntDesign } from "@expo/vector-icons";
+import React, { useState, useEffect } from 'react';
+import { firebase, auth, firestore } from '../../database/firebaseDB';
+import { collection, query, where, getDocs, QuerySnapshot, onSnapshot } from 'firebase/firestore';
 
-class MainScreen extends Component {
-    constructor() {
-        super();
 
-        this.ReccomendCollection = firebase.firestore().collection("Restaurant").orderBy("review", "desc");
-        this.InterestCollection = firebase.firestore().collection("Restaurant").orderBy("id", "asc");
-        this.NewCollection = firebase.firestore().collection("Restaurant").orderBy("id", "desc");
+import ShowProduct from '../../components/ShowProduct';
+import Carousel from '../../components/RestaurantCarousel';
 
-        this.state = {
-            Reccomend_list: [],
-            Interest_list: [],
-            New_list: []
+const HomeScreen = ({ navigation, route }, props) => {
+
+    // const [restaurantData, setrestaurantData] = useState([]);
+    const [categoryData, setCategoryData] = useState("");
+    const [cate, setCate] = useState("");
+    const [searchText, setSearchText] = useState('');
+
+    //search
+    const SearchData = async () => {
+
+        const q = query(collection(firebase.firestore(), "Restaurant"));
+        const querySnapshot = await getDocs(q);
+        const restaurantData = [];
+        const restaurantAll = [];
+        var i;
+
+        for (i = 0; i < querySnapshot.size; i++) {
+            const restaurant = querySnapshot.docs[i].data().category;
+            if (restaurant === cate) {
+
+                const dataPro = querySnapshot.docs[i].data();
+
+                const dataAll = {
+                    name: dataPro.name,
+                    id: querySnapshot.docs[i].id,
+                    detail: dataPro.detail,
+                    picture: dataPro.picture,
+                    rating: dataPro.rating,
+                    review: dataPro.review,
+                    telephone: dataPro.telephone,
+                }
+                restaurantData.push(dataAll);
+            }
+
+            else {
+                const dataPro = querySnapshot.docs[i].data();
+
+                const dataAll = {
+                    name: dataPro.name,
+                    id: querySnapshot.docs[i].id,
+                    detail: dataPro.detail,
+                    picture: dataPro.picture,
+                    rating: dataPro.rating,
+                    review: dataPro.review,
+                    telephone: dataPro.telephone,
+                }
+
+                restaurantAll.push(dataAll)
+            }
+
+        }
+
+
+        if (restaurantAll.length == querySnapshot.size) {
+
+            const filteredData = restaurantAll.filter(item =>
+                item.name.toLowerCase().includes(searchText.toLowerCase())
+            );
+            setCategoryData(filteredData)
+        }
+
+        else {
+            const filteredData = restaurantData.filter(item =>
+                item.name.toLowerCase().includes(searchText.toLowerCase())
+            );
+            setCategoryData(filteredData)
+        }
+    }
+
+    useEffect(() => {
+
+        const q = query(collection(firebase.firestore(), 'Restaurant'));
+
+        // Create a real-time listener to fetch and update data
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const restaurantData = [];
+            const restaurantAll = [];
+
+            snapshot.forEach((doc) => {
+                const dataPro = doc.data();
+                const dataAll = {
+                    name: dataPro.name,
+                    id: doc.id,
+                    detail: dataPro.detail,
+                    picture: dataPro.picture,
+                    rating: dataPro.rating,
+                    review: dataPro.review,
+                    telephone: dataPro.telephone
+                };
+                if (dataPro.category === cate) {
+                    restaurantData.push(dataAll);
+                } else {
+                    restaurantAll.push(dataAll);
+                }
+            });
+
+            if (restaurantAll.length === snapshot.size) {
+                setCategoryData(restaurantAll);
+            } else {
+                setCategoryData(restaurantData);
+            }
+        });
+
+        return () => {
+            // Unsubscribe from the real-time listener when the component unmounts
+            unsubscribe();
         };
-    }
 
-    getCollection = (querySnapshot, section) => {
-        const all_data = [];
-        querySnapshot.forEach((res) => {
-            const { id, name, category_name, review, detail, category_id, picture, rating, telephone } = res.data();
+    }, [cate])
 
-            all_data.push({
-                key: res.id,
-                id,
-                name,
-                category_name,
-                review,
-                detail,
-                category_id,
-                picture,
-                rating,
-                telephone
-            });
 
-            this.setState({
-                [section]: all_data
-            });
-        });
-    };
-
-    componentDidMount() {
-        this.unsubscribeReccomend = this.ReccomendCollection.onSnapshot(querySnapshot => {
-            this.getCollection(querySnapshot, "Reccomend_list");
-        });
-
-        this.unsubscribeInterest = this.InterestCollection.onSnapshot(querySnapshot => {
-            this.getCollection(querySnapshot, "Interest_list");
-        });
-
-        this.unsubscribeNew = this.NewCollection.onSnapshot(querySnapshot => {
-            this.getCollection(querySnapshot, "New_list");
-        });
-    }
-
-    componentWillUnmount() {
-        this.unsubscribeReccomend();
-        this.unsubscribeInterest();
-        this.unsubscribeNew();
-    }
-
-    navigateToViewDetaile = (item) => {
-        this.props.navigation.navigate("Detail", { key: item });
-    };
-
-    render() {
+    const renderedItem = (itemData) => {
         return (
-            <View style={styles.container}>
-                <Searchbar />
-                <ScrollView>
-                    <Buttonlocation />
-                    <Text style={styles.mainText} onPress={() => { this.props.navigation.navigate("Recommend") }} >ร้านอาหารยอดนิยม {'>'}</Text>
-                    <ScrollView showsVerticalScrollIndicator={false} horizontal={true}>
-                        {this.state.Reccomend_list.map((item, i) => {
-                            return (
-                                <TouchableOpacity style={{ marginLeft: 10, marginRight: 10 }} key={i} onPress={() => this.props.navigation.navigate("Detail", { key: item })}>
-                                    <View style={styles.card}>
-                                        <View style={styles.imageBox}>
-                                            <Image source={{ uri: item.picture }} style={styles.image} />
+            <ShowProduct
+                title={itemData.item.name}
+                pic={itemData.item.picture}
+                review={itemData.item.review}
 
-                                        </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, flexWrap: 'wrap' }}>
-                                            <View style={styles.maintext}>
-                                                <Text style={{ fontSize: 12, fontWeight: 'bold', marginLeft: 10 }}>{item.name}</Text>
-                                                <Text style={{ fontSize: 11, color: 'gray', marginLeft: 10 }}>{item.category_name}</Text>
-                                            </View>
-                                            <Text style={styles.review}>{item.review} รีวิว</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                            )
-                        })}
-                    </ScrollView>
-                    <Text style={styles.mainText} onPress={() => { this.props.navigation.navigate("Interest") }} >ร้านอาหารเก่า {'>'} </Text>
-                    <ScrollView showsVerticalScrollIndicator={false} horizontal={true}>
-                        {this.state.Interest_list.map((item, i) => {
-                            return (
-                                <TouchableOpacity style={{ marginLeft: 10, marginRight: 10 }} key={i} onPress={() => this.navigateToViewDetaile(item.key)}>
-                                    <View style={styles.card}>
-                                        <View style={styles.imageBox}>
-                                            <Image source={{ uri: item.picture }} style={styles.image} />
-
-                                        </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, flexWrap: 'wrap' }}>
-                                            <View style={styles.maintext}>
-                                                <Text style={{ fontSize: 12, fontWeight: 'bold', marginLeft: 10 }}>{item.name}</Text>
-                                                <Text style={{ fontSize: 11, color: 'gray', marginLeft: 10 }}>{item.category_name}</Text>
-                                            </View>
-                                            <Text style={styles.review}>{item.review} รีวิว</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                            )
-                        })}
-                    </ScrollView>
-                    <Text style={styles.mainText} onPress={() => { this.props.navigation.navigate("New") }}>ร้านอาหารใหม่ {'>'} </Text>
-                    <ScrollView showsVerticalScrollIndicator={false} horizontal={true}>
-                        {this.state.New_list.map((item, i) => {
-                            return (
-                                <TouchableOpacity style={{ marginLeft: 10, marginRight: 10 }} key={i} onPress={() => this.navigateToViewDetaile(item.key)}>
-                                    <View style={styles.card}>
-                                        <View style={styles.imageBox}>
-                                            <Image source={{ uri: item.picture }} style={styles.image} />
-
-                                        </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, flexWrap: 'wrap' }}>
-                                            <View style={styles.maintext}>
-                                                <Text style={{ fontSize: 12, fontWeight: 'bold', marginLeft: 10 }}>{item.name}</Text>
-                                                <Text style={{ fontSize: 11, color: 'gray', marginLeft: 10 }}>{item.category_name}</Text>
-                                            </View>
-                                            <Text style={styles.review}>{item.review} รีวิว</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                            )
-                        })}
-                    </ScrollView>
-                </ScrollView>
-            </View>
+                onSelectProduct={() => {
+                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review }, setCate(""));
+                }}
+            />
         );
     }
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.input} >
+                <TextInput style={{ width: '100%' }} placeholder="Search" onChangeText={text => setSearchText(text)} value={searchText} />
+
+                <AntDesign style={styles.searchIcon} name="search1" size={26} color={'gray'} onPress={() => SearchData(cate)} />
+
+            </View>
+            {/* <AntDesign style={{ position: 'absolute', right: 5, top: 15 }} name="notification" size={26} color={'gray'} /> */}
+            <ScrollView>
+                <Text style={[styles.title]}>Categories</Text>
+
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ height: 100 }}>
+                    <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                        <TouchableOpacity style={styles.cat} onPress={() => setCate("")}>
+                            <Image source={require('../../assets/all-2.png')} style={[styles.catagory,]} />
+                            <Text style={styles.catTitle}>ALL</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.cat} onPress={() => setCate("food")}>
+                            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2819/2819194.png' }} style={[styles.catagory,]} />
+                            <Text style={styles.catTitle}>FOOD</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.cat} onPress={() => setCate("clothes")}>
+                            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/3300/3300371.png' }} style={styles.catagory} />
+                            <Text style={styles.catTitle}>CLOTHES</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.cat} onPress={() => setCate("accessory")}>
+                            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/7695/7695930.png' }} style={styles.catagory} />
+                            <Text style={styles.catTitle}>ACCESSORY</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.cat} onPress={() => setCate("model")}>
+                            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/6967/6967594.png' }} style={styles.catagory} />
+                            <Text style={styles.catTitle}>MODEL</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.cat} onPress={() => setCate("other")}>
+                            <Image source={{ uri: 'https://icon-library.com/images/others-icon/others-icon-20.jpg' }} style={styles.catagory} />
+                            <Text style={styles.catTitle}>OTHERS</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+
+                <Text style={[styles.title ]}>Recommend</Text>
+
+
+                <FlatList
+                    data={categoryData}
+                    renderItem={renderedItem}
+                    numColumns={2}
+                />
+
+            </ScrollView>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F4EEEE',
-        fontFamily: ''
+        backgroundColor: '#fff',
+        marginHorizontal: 5,
     },
-    locate: {
-        width: 360,
-        height: 77,
-
+    cat: {
+        alignItems: 'center',
+        marginRight: 10
     },
-    mainText: {
-        marginLeft: 50,
-        marginTop: 10,
-        marginBottom: 10,
-        fontSize: 20
+    input: {
+        borderColor: "gray",
+        width: "90%",
+        borderWidth: 1,
+        borderRadius: 10,
+        marginVertical: 10,
+        padding: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    card: {
-        width: 150,
-        height: 165,
-        backgroundColor: "#ffff",
-        borderRadius: 5,
-        marginBottom: 5
-    },
-    imageBox: {
-        width: 150,
-        height: 113,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
-        overflow: "hidden"
-    },
-    image: {
-        width: 150,
-        height: 113,
-        resizeMode: "cover"
-    },
-    review: {
-        fontSize: 11,
+    searchIcon: {
+        padding: 5,
         position: 'absolute',
-        right: 10,
-        bottom: -1
-    }
-})
+        top: 0,
+        right: 5,
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'left'
+    },
+    catagory: {
+        width: 40,
+        height: 40,
+        borderRadius: 10,
 
-export default MainScreen;
+    },
+    catTitle: {
+        fontSize: 14,
+        fontWeight: 'light',
+        marginHorizontal: 10,
+        marginTop: 5
+    },
+});
+
+
+export default HomeScreen;

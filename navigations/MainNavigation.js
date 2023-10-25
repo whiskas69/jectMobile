@@ -99,7 +99,7 @@ function HomeNavigation() {
                 name="Detail"
                 component={DetailSceen}
                 options={{
-                    title: "Detail"
+                    title: "รายละเอียด"
                 }} />
         </HomeNavigator.Navigator>
     );

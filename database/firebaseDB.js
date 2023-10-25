@@ -10,12 +10,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyArM80IOVKPeBib04P4_JH97G3i4EGSeC8",
-  authDomain: "project-gastronome.firebaseapp.com",
-  projectId: "project-gastronome",
-  storageBucket: "project-gastronome.appspot.com",
-  messagingSenderId: "804981356233",
-  appId: "1:804981356233:web:7a20f787d6685a568fbf18"
+  apiKey: "AIzaSyBkVoPorfLqJ78o2615fwkY05ixVcgxeVw",
+  authDomain: "mobile-lab10-eb46b.firebaseapp.com",
+  projectId: "mobile-lab10-eb46b",
+  storageBucket: "mobile-lab10-eb46b.appspot.com",
+  messagingSenderId: "191540488435",
+  appId: "1:191540488435:web:d0c1674f48a0a7c7676f86",
+  measurementId: "G-04JG1LR2PX"
 };
 
 // Initialize Firebase
