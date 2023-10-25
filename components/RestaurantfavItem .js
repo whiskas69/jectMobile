@@ -14,7 +14,7 @@ const RestaurantItem = ({list}) => {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems:'center', marginTop: 10}}>
                         <View style={styles.maintext}>
                             <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 10 }}>{list.name}</Text>
-                            <Text style={{ fontSize: 13, color: 'gray', marginLeft: 10 }}>{list.category_name}</Text>
+                            <Text style={{ fontSize: 13, color: 'gray', marginLeft: 10 }}>{list.categories_name}</Text>
                         </View>
                     </View>
                 </View>

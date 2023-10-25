@@ -145,7 +145,7 @@ const DetailScreen = ({ navigation, route }) => {
             // Add other user data fields as needed
         };
 
-        console.log("data 158" ,data);
+        console.log("data 158", data);
         addDoc(collection(firestore, 'comments'), data)
             .then(() => {
                 console.log('User data added to Firestore');
@@ -262,134 +262,129 @@ const DetailScreen = ({ navigation, route }) => {
 
     )
     return (
-        <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: 'white' }}>
-            <Image source={{ uri: route.params.pic }} style={{ width: '100%', height: responsiveHeight(40) }} />
-            <View style={{ margin: 10, }}>
-                <Text style={styles.title}>{route.params.title}</Text>
-                <View style={{ flexDirection: 'row', marginTop: 5, }}>
-                    {starIcons}
-                    <Text style={{ fontSize: 16, bottom: 0 }}> ({route.params.rating}) </Text>
+        <View style={styles.container}>
+            <ScrollView>
+                <Image source={{ uri: route.params.pic }} style={styles.picture} />
+                <Text style={styles.name}>{route.params.title}</Text>
+                <View style={styles.rating}>
+                    <View style={styles.star}>
+                        <Text style={{ color: 'white', textAlign: "center" }}>{route.params.rating}</Text>
+                        <FontAwesome name="star" size={15} color="white" />
+                    </View>
 
-                    {/* <Text style={{ fontSize: 16, bottom: 0 }}> prop.item.rate (5.0) </Text> */}
+                    <Text>{route.params.review} รีวิว</Text>
+
+                    <View style={styles.fav}>
+                        <Fontisto name="favorite" size={24} color="black" />
+                        <Text>ชื่นชอบ</Text>
+                    </View>
                 </View>
-                <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold', marginTop: 5 }}> {route.params.price} Baht</Text>
+                <Text style={{ marginTop: 10, color: "gray" }}>{route.params.categories_name}</Text>
+                <Text style={{ fontWeight: "bold", marginTop: 10 }}>รายละเอียด</Text>
+                <Text style={{ marginTop: 10 }}>{route.params.detail}</Text>
+                <Text>โทร : {route.params.telephone} </Text>
+                <></>
 
-                {/* <TouchableOpacity
-                    style={[
-                        styles.button,
-                        // { backgroundColor: purchasedAmount >= amount ? '#ccc' : '#9276F2' }
-                    ]}
-                    onPress={() => {
-                        if (purchasedAmount >= amount) {
-                            console.log('sold out')
-                        } else {
-                            navigation.navigate('Cart', { title: route.params.title, pic: route.params.pic, price: route.params.price, owner: route.params.owner, productId: productId })
-                        }
-                    }}
-                    disabled={purchasedAmount >= amount}
-                >
-                    <Text style={styles.buttonText}>
-                        {purchasedAmount >= amount ? 'Sold Out' : 'Buy'}
+                <View style={{ marginHorizontal: 20 }}>
+                    <Text style={styles.header}>Description</Text>
+                    <Text style={styles.content}>
+
+                        {route.params.detail}
                     </Text>
-                </TouchableOpacity> */}
+                </View>
+                <View style={{ borderTopWidth: 1, borderColor: 'gray', marginTop: 20, marginHorizontal: 20 }}>
+                    <Text style={[styles.header,]}>Condition</Text>
+                    <Text style={[styles.content,]}>
 
-            </View>
-
-            {/* store account */}
-            <View style={{
-                borderBottomColor: '#aaa',
-                borderBottomWidth: 1,
-                paddingVertical: 7,
-                flexDirection: 'row',
-                alignItems: 'center',
-                columnGap: 10,
-                marginTop: 10,
-                borderTopColor: '#aaa',
-                borderTopWidth: 1,
-                backgroundColor: '#ddd',
-                paddingVertical: 10
-            }}>
-                <Image
-                    source={
-                        store.photoURL
-                            ? { uri: store.photoURL }
-                            : require("../../assets/profile.png")
-                    }
-                    style={[styles.account,]} />
-                <Text style={{ fontSize: 20, fontWeight: '600', }}> {store.name} </Text>
-            </View>
-
-            {/* Detail Product */}
-
-            <View style={{ marginHorizontal: 20 }}>
-                <Text style={styles.header}>Description</Text>
-                <Text style={styles.content}>
-
-                    {route.params.detail}
-                </Text>
-            </View>
-            <View style={{ borderTopWidth: 1, borderColor: 'gray', marginTop: 20, marginHorizontal: 20 }}>
-                <Text style={[styles.header,]}>Condition</Text>
-                <Text style={[styles.content,]}>
-
-                    {route.params.policy}
-                </Text>
-            </View>
-
-
-            {/* comments */}
-
-            <View style={{ marginTop: 30 }}>
-                <Text style={[styles.header, { fontSize: 20, fontWeight: '200' }]}>Comments</Text>
-                <CustomRatingBar />
-                {/* <Text style={{ textAlign: 'center' }}>{defaultRating + '/' + maxRating.length}</Text> */}
-
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
-
-                    <TextInput style={[styles.input, {
-                        flex: 1,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                            width: 0,
-                            height: 1,
-                        },
-                        shadowOpacity: 0.20,
-                        shadowRadius: 1.41,
-                        elevation: 2,
-                        paddingLeft: 20
-                    }]}
-                        multiline
-                        numberOfLines={3}
-                        maxLength={100000}
-                        placeholder='Feedback'
-                        onChangeText={text => setAddComment(text)} value={addComment} />
-                    <TouchableOpacity style={{ alignItems: 'flex-end', marginRight: 20 }} onPress={AddComment} disabled={addComment == ""}>
-                        <Image source={require("../../assets/send.png")} style={{ width: 30, height: 30 }} />
-                    </TouchableOpacity>
+                        {route.params.policy}
+                    </Text>
                 </View>
 
-            </View>
 
-            <FlatList
-                data={getComments}
-                renderItem={comment}
-                numColumns={1}
-                keyExtractor={(item, index) => `${item.ProductId}_${index}`}
+                {/* comments */}
 
-                style={{ marginBottom: 20 }}
-            />
+                <View style={{ marginTop: 30 }}>
+                    <Text style={[styles.header, { fontSize: 20, fontWeight: '200' }]}>Comments</Text>
+                    <CustomRatingBar />
+                    {/* <Text style={{ textAlign: 'center' }}>{defaultRating + '/' + maxRating.length}</Text> */}
 
-        </ScrollView >
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}>
+
+                        <TextInput style={[styles.input, {
+                            flex: 1,
+                            shadowColor: "#000",
+                            shadowOffset: {
+                                width: 0,
+                                height: 1,
+                            },
+                            shadowOpacity: 0.20,
+                            shadowRadius: 1.41,
+                            elevation: 2,
+                            paddingLeft: 20
+                        }]}
+                            multiline
+                            numberOfLines={3}
+                            maxLength={100000}
+                            placeholder='Feedback'
+                            onChangeText={text => setAddComment(text)} value={addComment} />
+                        <TouchableOpacity style={{ alignItems: 'flex-end', marginRight: 20 }} onPress={AddComment} disabled={addComment == ""}>
+                            <Image source={require("../../assets/send.png")} style={{ width: 30, height: 30 }} />
+                        </TouchableOpacity>
+                    </View>
+
+                </View>
+
+                <FlatList
+                    data={getComments}
+                    renderItem={comment}
+                    numColumns={1}
+                    keyExtractor={(item, index) => `${item.ProductId}_${index}`}
+
+                    style={{ marginBottom: 20 }}
+                />
+
+            </ScrollView >
+        </View >
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        // margin: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 10,
+        backgroundColor: "#F4EEEE",
+    },
+    picture: {
+        width: "100%",
+        height: 150,
+        resizeMode: "cover"
+    },
+    name: {
+        fontWeight: "bold",
+        marginTop: 10,
+        fontSize: 20
+    },
+    star: {
+        flexDirection: "row",
+        gap: 5,
+        alignItems: "center",
+        backgroundColor: "red",
+        borderRadius: 5,
+        padding: 5
+    },
+    rating: {
+        flexDirection: "row",
+        marginTop: 10,
+        gap: 10,
+        alignItems: "center"
+    },
+    fav: {
+        flexDirection: "row",
+        left: 170,
+        gap: 10,
+        alignItems: "center"
     },
     button: {
         position: 'absolute',

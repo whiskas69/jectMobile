@@ -14,7 +14,7 @@ const RestaurantItem = (props) => {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
                         <View style={styles.maintext}>
                             <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 10 }}>{props.title}</Text>
-                            <Text style={{ fontSize: 13, color: 'gray', marginLeft: 10 }}>{props.category_name}</Text>
+                            <Text style={{ fontSize: 13, color: 'gray', marginLeft: 10 }}>{props.categories_name}</Text>
                         </View>
                         <Text style={{ fontSize: 15, height: 30, width: 60, alignItems: 'center' }}>{props.review} รีวิว</Text>
                     </View>
