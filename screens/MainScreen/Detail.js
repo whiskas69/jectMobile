@@ -10,7 +10,7 @@ import Buttonseecomment from '../../components/Buttonseecomment';
 import { Button, Input } from "react-native-elements";
 import { collection, query, where, getDocs, addDoc, onSnapshot, orderBy } from 'firebase/firestore';
 
-import comment from "../../components/comments";
+import comment from "../../components/Comments";
 
 const DetailScreen = ({ navigation, route }) => {
     console.log('15 route', route);

@@ -37,6 +37,7 @@ const ProfileScreen = ({ navigation }) => {
               
             });
             setData(result);
+            setHistoryData(result)
             
           });
 
