@@ -36,6 +36,7 @@ const RecommendScreen = ({ navigation, route }, props) => {
                     rating: dataPro.rating,
                     review: dataPro.review,
                     telephone: dataPro.telephone,
+                    categories_name: dataPro.categories_name
                 }
                 restaurantData.push(dataAll);
             }
@@ -50,6 +51,7 @@ const RecommendScreen = ({ navigation, route }, props) => {
                     rating: dataPro.rating,
                     review: dataPro.review,
                     telephone: dataPro.telephone,
+                    categories_name: dataPro.categories_name
                 }
                 restaurantAll.push(dataAll)
             }
@@ -99,7 +101,8 @@ const RecommendScreen = ({ navigation, route }, props) => {
                     picture: dataPro.picture,
                     rating: dataPro.rating,
                     review: dataPro.review,
-                    telephone: dataPro.telephone
+                    telephone: dataPro.telephone,
+                    categories_name: dataPro.categories_name
                 };
                 if (dataPro.category === cate) {
                     restaurantData.push(dataAll);
@@ -129,9 +132,11 @@ const RecommendScreen = ({ navigation, route }, props) => {
                 title={itemData.item.name}
                 pic={itemData.item.picture}
                 review={itemData.item.review}
+                categories_name={itemData.item.categories_name}
+                telephone={itemData.item.telephone}
 
                 onSelectProduct={() => {
-                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review });
+                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, categories_name: itemData.item.categories_name, telephone: itemData.item.telephone  });
                 }}
             />
         );
@@ -143,9 +148,11 @@ const RecommendScreen = ({ navigation, route }, props) => {
                 title={itemData.item.name}
                 pic={itemData.item.picture}
                 review={itemData.item.review}
+                categories_name={itemData.item.categories_name}
+                telephone={itemData.item.telephone}
 
                 onSelectProduct={() => {
-                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review });
+                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, categories_name: itemData.item.categories_name, telephone: itemData.item.telephone  });
                 }}
             />
         )

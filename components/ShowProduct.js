@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { AntDesign } from "@expo/vector-icons";
 import { responsiveHeight } from "react-native-responsive-dimensions";
 const ShowProduct = (props) => {
+    console.log("props" ,props);
     return (
         <View style={styles.card}>
             <TouchableOpacity style={{ height: 260, flexDirection: "row", }} onPress={props.onSelectProduct}>
@@ -13,8 +14,8 @@ const ShowProduct = (props) => {
                     <Text style={styles.catTitle} numberOfLines={2}> {props.title}</Text>
                     <View style={{ flexDirection: 'row', marginTop: 5 }}>
                         <Text style={{
-                            fontSize: 16, bottom: -50, position: "absolute"
-                        }}>{props.category_name}</Text>
+                            fontSize: 16, bottom: -50, position: "absolute", left: 5
+                        }}>{props.categories_name}</Text>
 
                         <Text style={styles.review}>{props.review} รีวิว</Text>
                     </View>
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
     },
     catTitle: {
         marginTop: 10,
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: 'bold',
     },
     product: {
