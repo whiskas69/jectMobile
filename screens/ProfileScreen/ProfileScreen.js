@@ -1,74 +1,68 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Button, Image, Navbar, Pressable } from 'react-native';
-import { firebase, auth, storage } from "../../database/firebaseDB"
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { firebase, auth } from "../../database/firebaseDB"
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 
-const Profile = ({ navigation }) => {
-    const user = firebase.auth().currentUser;
-    const [id, setid] = useState("");
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [profile, setProfile] = useState('');
+const ProfileSceen = ({ navigation }) => {
     const [data, setData] = useState([]);
 
-    const userData = () => {
-        const collectionRef = firebase.firestore().collection("user");
-        collectionRef.get()
-            .then((querySnapshot) => {
-                const item = [];
-                querySnapshot.forEach((res) => {
-                    let info = res.data();
-                    if (info.email === user.email) {
-                        item.push({
-                            key: res.id,
-                            name: info.username,
-                            email: info.email,
-                            profile: info.profile
-                        });
-                        setid(res.id),
-                            setUsername(info.username),
-                            setEmail(info.email),
-                            setProfile(info.profile)
-                    }
-                });
-                setData(item)
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            })
-    };
-    // console.log("user ",collectionRef)
-
     useEffect(() => {
-        userData();
+        const userData = async () => {
+            try {
+                if (auth.currentUser) {
+                    const userEmail = auth.currentUser.email;
+                    const q = query(collection(firebase.firestore(), 'user'), where('email', '==', userEmail));
+                    const userDataRef = onSnapshot(q, (querySnapshot) => {
+                        const userData = querySnapshot.docs[0].data();
+                        setData(userData);
+                    });
+
+                    return () => {
+                        // Unsubscribe from the initial fetchData listener when component unmounts
+                        userDataRef();
+                    };
+                }
+            } catch (error) {
+                console.error('Error fetching data from Firestore:', error);
+            }
+        };
+
+        const unsubscribe = userData();
+
+        return () => {
+            // Unsubscribe from the initial fetchData listener when component unmounts
+            unsubscribe();
+        };
+
     }, []);
 
-    const handleSignOut = () => {
+    const handleLogout = () => {
         auth
             .signOut()
             .then(() => {
                 navigation.replace("Login")
-    
+
             })
             .catch(error => console.log(error.message))
     }
+    console.log("daTAA1: ", data)
 
     return (
         <View style={styles.container}>
 
-<View style={{ flexDirection: 'row', marginBottom: 25, marginTop: 5, }}>
-                {profile ? (
+            <View style={{ flexDirection: 'row', marginBottom: 25, marginTop: 5, }}>
+                {data.profile ? (
                     <Image
-                        source={{ uri: profile }}
+                        source={{ uri: data.profile }}
                         style={{ width: 80, height: 80, marginLeft: 20, }}
                     />
                 ) : null}
-                
+
                 <View style={{ marginTop: 25, marginLeft: 20, }}>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', }}>{username}</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', }}>{data.username}</Text>
                 </View>
             </View>
-
 
             <Pressable style={styles.aboutMe} onPress={() => navigation.navigate('History')}>
                 {/* ใส่ onPress={onPress} ใน Pressable*/}
@@ -76,7 +70,7 @@ const Profile = ({ navigation }) => {
                 <Text style={{ marginLeft: 185 }}> {'>'} </Text>
             </Pressable>
 
-            <Pressable style={styles.aboutMe} onPress={() => navigation.navigate("Edit", { key: data[0].key })}>
+            <Pressable style={styles.aboutMe} onPress={() => navigation.navigate("Edit")}>
                 {/* ใส่ onPress={onPress} ใน Pressable*/}
                 <Text style={{ marginLeft: 25, }}>แก้ไขข้อมูลส่วนตัว</Text>
                 <Text style={{ marginLeft: 165, }}> {'>'} </Text>
@@ -88,16 +82,12 @@ const Profile = ({ navigation }) => {
                 <Text style={{ marginLeft: 185, }}> {'>'} </Text>
             </Pressable>
 
-
-            {/* <Button title="Logout"  /> */}
-            <Pressable style={styles.buttonLogout} onPress={handleSignOut}>
+            <Pressable style={styles.buttonLogout} onPress={handleLogout}>
                 <Text style={{ color: "red", }}>ออกจากระบบ</Text>
             </Pressable>
 
-
         </View>
     );
-
 };
 
 const styles = StyleSheet.create({
@@ -124,4 +114,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Profile;
+export default ProfileSceen;

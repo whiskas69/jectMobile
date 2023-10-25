@@ -6,7 +6,6 @@ import { useFonts, Kodchasan_400Regular } from '@expo-google-fonts/kodchasan';
 
 import Searchbar from "../../components/Searchbar";
 import Buttonlocation from "../../components/Buttonlocation";
-// import Carousel from "../../components/ResCarousel";
 
 class MainScreen extends Component {
     constructor() {

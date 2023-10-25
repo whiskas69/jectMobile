@@ -17,6 +17,7 @@ import ReviewHistoryScreen from "../screens/ProfileScreen/ReviewHisScreen"
 import EditProfileScreen from "../screens/ProfileScreen/EditProfileScreen"
 import ChangPassword from "../screens/ProfileScreen/ChangePasswordScreen"
 import DetailSceen from "../screens/MainScreen/Detail";
+import Categories from "../screens/MainScreen/CategoryScreen";
 
 const HomeNavigator = createNativeStackNavigator();
 const CategoryNavigator = createNativeStackNavigator();
