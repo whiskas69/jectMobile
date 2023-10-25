@@ -204,9 +204,10 @@ const HomeScreen = ({ navigation, route }, props) => {
                 pic={itemData.item.picture}
                 review={itemData.item.review}
                 categories_name={itemData.item.categories_name}
+                telephone={itemData.item.telephone}
 
                 onSelectProduct={() => {
-                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, categories_name: itemData.item.categories_name  });
+                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, categories_name: itemData.item.categories_name, telephone: itemData.item.telephone  });
                 }}
             />
         );
@@ -219,9 +220,10 @@ const HomeScreen = ({ navigation, route }, props) => {
                 pic={itemData.item.picture}
                 review={itemData.item.review}
                 categories_name={itemData.item.categories_name}
+                telephone={itemData.item.telephone}
 
                 onSelectProduct={() => {
-                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, categories_name: itemData.item.categories_name });
+                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, categories_name: itemData.item.categories_name, telephone: itemData.item.telephone  });
                 }}
             />
         )
