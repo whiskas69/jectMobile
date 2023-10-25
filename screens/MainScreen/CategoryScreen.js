@@ -1,56 +1,63 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, ScrollView, FlatList, Image, Text, TouchableOpacity } from 'react-native';
+import { firebase, firestore } from "../../database/firebaseDB";
+// import 'firebase/firestore';
+import { ListItem, Avatar } from "react-native-elements";
 
-const Categories = () => {
+const Categories = ({ navigation }) => {
+    const [data, setData] = useState([]);
+
+    const getCategories = async () => {
+        try {
+            const querySnapshot = await firebase.firestore().collection("Categories")
+            .orderBy("id", "asc").get();
+            const categoriesData = querySnapshot.docs.map((doc) => doc.data());
+            setData(categoriesData);
+            // console.log("llllllll", categoriesData)
+        } catch (error) {
+            console.error('Error fetching Categories:', error);
+        }
+    }
+    useEffect(() => {
+        getCategories()
+    })
+
     return (
         <View style={styles.container}>
-            <ScrollView>
-            <View style={{ flexDirection: 'row', flexDirection: "row", flexWrap: "wrap", justifyContent: "center"}}>
-            <View style={styles.category}>
-                    <Image
-                        source={require("../../assets/pic/iconfood.png")}
-                        style={{ width: 80, height: 80, }}
-                    />
-                    <Text style={{ color: '#3F2305', fontSize: 18, marginTop: 5 }}>อาหารตามสั่ง</Text>
-                </View>
-            </View>
 
-            </ScrollView>
-            
-            {/* <View style={{ flexDirection: 'row', }}>
-                <View style={styles.category}>
-                    <Image
-                        source={require("../../assets/pic/iconfood.png")}
-                        style={{ width: 80, height: 80, }}
-                    />
-                    <Text style={{ color: '#3F2305', fontSize: 18, marginTop: 5 }}>อาหารตามสั่ง</Text>
+            <ScrollView>
+                <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap", justifyContent: "center" }}>
+                    {data.map((itemData, i) => {
+                        return (
+                            <View key={i} style={{ ...styles.category, backgroundColor: itemData.color }} >
+                                {/* <View></View> */}
+                                <TouchableOpacity style={{ marginLeft: 10, marginRight: 10 }} key={i} onPress={() => navigation.navigate("CateDetail", { key: itemData })} >
+                                    <View style={{ justifyContent: "center", alignItems: "center", backgroundColor: itemData.color }}>
+                                        <Image source={{ uri: itemData.img }} style={styles.pic} />
+                                        <Text style={styles.txt}> {itemData.name} </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+
+                        );
+                    })}
                 </View>
-                <View style={styles.category}>
-                    <Image
-                        source={require("../../assets/pic/iconfood.png")}
-                        style={{ width: 80, height: 80, }}
-                    />
-                    <Text style={{ color: '#3F2305', fontSize: 18, marginTop: 5 }}>อาหารตามสั่ง</Text>
-                </View>
-            </View> */}
-        
-        </View>
+                {/* </TouchableOpacity> */}
+
+            </ScrollView >
+
+        </View >
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // padding: 15,
         backgroundColor: "#F4EEEE",
         alignItems: 'center',
         justifyContent: 'center',
-        // flexDirection: "row",
-        // flexWrap: "wrap"
     },
     scoll: {
-        // alignItems: "center",
-        // justifyContent: "center",
         flexDirection: "row",
         flexWrap: "wrap"
     }
