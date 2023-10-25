@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   buttonSave: {
     backgroundColor: "#FFDBAA",
-    marginTop: 600,
+    marginTop: 100,
     height: 50,
     borderRadius: 10,
     alignItems: 'center',

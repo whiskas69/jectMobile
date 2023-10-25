@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
-import { firebase, auth } from "../../database/firebaseDB"
+import { firebase, auth } from "../../database/firebaseDB";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 
@@ -11,11 +11,12 @@ const ProfileSceen = ({ navigation }) => {
         const userData = async () => {
             try {
                 if (auth.currentUser) {
-                    const userEmail = auth.currentUser.email;
+                    const userEmail = auth.currentUser.email;//email, uid,
                     const q = query(collection(firebase.firestore(), 'user'), where('email', '==', userEmail));
                     const userDataRef = onSnapshot(q, (querySnapshot) => {
                         const userData = querySnapshot.docs[0].data();
                         setData(userData);
+                        console.log("dataaaaaaa", userData)
                     });
 
                     return () => {
@@ -81,6 +82,12 @@ const ProfileSceen = ({ navigation }) => {
                 <Text style={{ marginLeft: 25, }}>เปลี่ยนรหัสผ่าน</Text>
                 <Text style={{ marginLeft: 185, }}> {'>'} </Text>
             </Pressable>
+            
+            <Pressable style={styles.aboutMe} onPress={() => navigation.navigate('AddRest')}>
+                {/* ใส่ onPress={onPress} ใน Pressable*/}
+                <Text style={{ marginLeft: 25, }}>สร้างร้านอาหาร</Text>
+                <Text style={{ marginLeft: 185, }}> {'>'} </Text>
+            </Pressable>
 
             <Pressable style={styles.buttonLogout} onPress={handleLogout}>
                 <Text style={{ color: "red", }}>ออกจากระบบ</Text>
@@ -106,7 +113,7 @@ const styles = StyleSheet.create({
     },
     buttonLogout: {
         backgroundColor: "#FFDBAA",
-        marginTop: 200,
+        marginTop: 100,
         height: 50,
         borderRadius: 10,
         alignItems: 'center',
