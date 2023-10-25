@@ -5,8 +5,7 @@ import { useFonts } from 'expo-font';
 import { collection, query, where, getDocs, onSnapshot } from 'firebase/firestore';
 import { AntDesign } from '@expo/vector-icons';
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
-import comment from "../../components/Comments";
-// import History from "../components/History";
+import comment from "../../components/CommentUser";
 
 const ProfileScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
