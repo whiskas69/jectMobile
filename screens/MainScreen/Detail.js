@@ -125,6 +125,9 @@ const DetailScreen = ({ navigation, route }) => {
         console.log("userData", userData);
 
         const name = userData.username;
+        const profile = userData.profile;
+
+        console.log("userprofile", profile);
         const currentDate = new Date(); // Get the current date and time
 
         // Create an array of month names for formatting
@@ -133,6 +136,7 @@ const DetailScreen = ({ navigation, route }) => {
         // Format the date and time
         const formattedDate = `${currentDate.getDate()}-${monthNames[currentDate.getMonth()]}-${currentDate.getFullYear()} ${currentDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
 
+        
         const data = {
             id: auth.currentUser.uid,
             name: name,
@@ -140,9 +144,7 @@ const DetailScreen = ({ navigation, route }) => {
             time: formattedDate,
             ProductId: route.params.id,
             rating: defaultRating,
-            imageProfile: auth.currentUser.photoURL
-
-            // Add other user data fields as needed
+            imageProfile: userData.profile
         };
 
         console.log("data 158", data);
@@ -285,7 +287,7 @@ const DetailScreen = ({ navigation, route }) => {
                 <Text style={{ marginTop: 10 }}>{route.params.detail}</Text>
                 <Text>โทร : {route.params.telephone} </Text>
 
-                <Text style={styles.menurec}>ตัวอย่างมนู {'>'}</Text>
+                {/* <Text style={styles.menurec}>ตัวอย่างมนู {'>'}</Text> */}
 
                 <View style={{ borderTopWidth: 1, borderColor: 'gray', marginTop: 20, marginHorizontal: 20 }}>
                 </View>
