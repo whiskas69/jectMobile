@@ -12,7 +12,7 @@ const Carousel = (props) => {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, flexWrap: 'wrap' }}>
                     <View style={styles.maintext}>
                         <Text style={{ fontSize: 12, fontWeight: 'bold', marginLeft: 10 }}>{props.title}</Text>
-                        <Text style={{ fontSize: 11, color: 'gray', marginLeft: 10 }}>list.category_name</Text>
+                        <Text style={{ fontSize: 11, color: 'gray', marginLeft: 10 }}>{props.category_name}</Text>
                     </View>
                     <Text style={styles.review}>{props.review} รีวิว</Text>
                 </View>

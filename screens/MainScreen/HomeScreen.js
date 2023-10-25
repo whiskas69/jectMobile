@@ -39,6 +39,7 @@ const HomeScreen = ({ navigation, route }, props) => {
                     rating: dataPro.rating,
                     review: dataPro.review,
                     telephone: dataPro.telephone,
+                    category_name: dataPro.category_name
                 }
                 restaurantData.push(dataAll);
             }
@@ -53,6 +54,7 @@ const HomeScreen = ({ navigation, route }, props) => {
                     rating: dataPro.rating,
                     review: dataPro.review,
                     telephone: dataPro.telephone,
+                    category_name: dataPro.category_name
                 }
                 restaurantAll.push(dataAll)
             }
@@ -102,7 +104,8 @@ const HomeScreen = ({ navigation, route }, props) => {
                     picture: dataPro.picture,
                     rating: dataPro.rating,
                     review: dataPro.review,
-                    telephone: dataPro.telephone
+                    telephone: dataPro.telephone,
+                    category_name: dataPro.category_name
                 };
                 if (dataPro.category === cate) {
                     restaurantData.push(dataAll);
@@ -133,7 +136,8 @@ const HomeScreen = ({ navigation, route }, props) => {
                     picture: dataPro.picture,
                     rating: dataPro.rating,
                     review: dataPro.review,
-                    telephone: dataPro.telephone
+                    telephone: dataPro.telephone,
+                    category_name: dataPro.category_name
                 };
                 if (dataPro.category === cate) {
                     restaurantData.push(dataAll);
@@ -164,7 +168,8 @@ const HomeScreen = ({ navigation, route }, props) => {
                     picture: dataPro.picture,
                     rating: dataPro.rating,
                     review: dataPro.review,
-                    telephone: dataPro.telephone
+                    telephone: dataPro.telephone,
+                    category_name: dataPro.category_name
                 };
                 if (dataPro.category === cate) {
                     restaurantData.push(dataAll);
@@ -198,7 +203,7 @@ const HomeScreen = ({ navigation, route }, props) => {
                 review={itemData.item.review}
 
                 onSelectProduct={() => {
-                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review });
+                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, category_name: itemData.item.category_name  });
                 }}
             />
         );
@@ -212,7 +217,7 @@ const HomeScreen = ({ navigation, route }, props) => {
                 review={itemData.item.review}
 
                 onSelectProduct={() => {
-                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review });
+                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, category_name: itemData.item.category_name });
                 }}
             />
         )

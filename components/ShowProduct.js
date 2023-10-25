@@ -14,7 +14,7 @@ const ShowProduct = (props) => {
                     <View style={{ flexDirection: 'row', marginTop: 5 }}>
                         <Text style={{
                             fontSize: 16, bottom: -50, position: "absolute"
-                        }}> list.category_name </Text>
+                        }}>{props.category_name}</Text>
 
                         <Text style={styles.review}>{props.review} รีวิว</Text>
                     </View>
