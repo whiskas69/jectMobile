@@ -18,6 +18,9 @@ import EditProfileScreen from "../screens/ProfileScreen/EditProfileScreen"
 import ChangPassword from "../screens/ProfileScreen/ChangePasswordScreen"
 import DetailSceen from "../screens/MainScreen/Detail";
 import Categories from "../screens/MainScreen/CategoryScreen";
+import CateDetailScreen from "../screens/MainScreen/CategoryDetail";
+import AddRestScreen from "../screens/ProfileScreen/AddRestScreen";
+import FavoriteSceen from "../screens/MainScreen/FavoritScreen"
 
 const HomeNavigator = createNativeStackNavigator();
 const CategoryNavigator = createNativeStackNavigator();
@@ -87,7 +90,7 @@ function HomeNavigation() {
                 name="Interest"
                 component={Interest}
                 options={{
-                    title: "ร้านอาหารตามตัวอักษร"
+                    title: "ร้านอาหารน่าสนใจ"
                 }} />
             <HomeNavigator.Screen
                 name="New"
@@ -99,7 +102,7 @@ function HomeNavigation() {
                 name="Detail"
                 component={DetailSceen}
                 options={{
-                    title: "รายละเอียด"
+                    title: "Detail"
                 }} />
         </HomeNavigator.Navigator>
     );
@@ -120,6 +123,12 @@ function CategoryNavigation() {
                 options={{
                     title: "หมวดหมู่"
                 }} />
+                <CategoryNavigator.Screen
+                name="CateDetail"
+                component={CateDetailScreen}
+                options={{
+                    title: "หน้าหลัก"
+                }} />
         </CategoryNavigator.Navigator>
     );
 }
@@ -135,7 +144,7 @@ function FavoriteNavigation() {
             }}>
             <FavoriteNavigator.Screen
                 name="Favorite"
-                component={Favorite}
+                component={FavoriteSceen}
                 options={{
                     title: "ร้านที่ชื่นชอบ"
                 }} />
@@ -179,6 +188,12 @@ function ProfileNavigation() {
                 component={ChangPassword}
                 options={{
                     title: "แก้ไขรหัสผ่าน"
+                }} />
+            <ProfileNavigator.Screen
+                name="AddRest"
+                component={AddRestScreen}
+                options={{
+                    title: "สร้างร้านอาหาร"
                 }} />
 
         </ProfileNavigator.Navigator>
