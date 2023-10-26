@@ -11,6 +11,7 @@ import { Button, Input } from "react-native-elements";
 import { collection, query, where, getDocs, addDoc, onSnapshot, orderBy } from 'firebase/firestore';
 
 import comment from "../../components/Comments";
+import { Alert } from "react-native";
 
 const DetailScreen = ({ navigation, route }) => {
     console.log('15 route', route);
@@ -19,6 +20,8 @@ const DetailScreen = ({ navigation, route }) => {
     const [getfav, setFav] = useState([]);
     const [productId, setProductId] = useState(route.params.id);
     const [store, setStore] = useState([]);
+
+    console.log("has route", route.params);
 
     const getStore = async () => {
         console.log("mail", route.params.mail)
@@ -162,42 +165,57 @@ const DetailScreen = ({ navigation, route }) => {
         setdefaultRating(1);
     }
 
-    // const addfav = async () => {
-    //     // console.log(auth.currentUser)
-    //     const userEmail = auth.currentUser?.email;
-    //     const q = query(collection(firebase.firestore(), 'user'), where('email', '==', userEmail));
+    const addfav = async () => {
+        // console.log(auth.currentUser)
+        const userEmail = auth.currentUser?.email;
+        const q = query(collection(firebase.firestore(), 'user'), where('email', '==', userEmail));
 
-    //     console.log(q)
+        console.log(q)
+        const querySnapshot = await getDocs(q);
 
-    //     const querySnapshot = await getDocs(q);
+        console.log("135", querySnapshot);
+        const userData = querySnapshot.docs[0].data();
+        const name = userData.username;
+        const profile = userData.profile;
 
-    //     console.log("135", querySnapshot);
-    //     const userData = querySnapshot.docs[0].data();
-
-    //     const data = {
-    //         id: auth.currentUser.uid,
-    //         name: route.params.name,
-    //         detail: route.params.detail,
-    //         ProductId: route.params.id,
-    //         rating: defaultRating,
-    //         picture: route.params.pic,
-    //         review: route.params.review,
-    //         telephone: route.params.telephone,
-    //         categories_name: route.params.categories_name
-    //     };
-
-    //     console.log("data 158", data);
-    //     addDoc(collection(firestore, 'favorite'), data)
-    //         .then(() => {
-    //             console.log('User fav added to Firestore');
-
-    //             alert("Correct")
-    //         })
-    //         .catch(error => {
-    //             alert('error');
-    //             console.error('Error adding user data to Firestore:', error);
-    //         });
-    // }
+        if (route.params.has === "ไม่อยากมี" || route.params.has == "มีแล้ว") {
+            const delfav = firebase.firestore()
+            .collection("favorite")
+            .doc(route.params.id);
+            delfav.delete().then(() => {
+                Alert.alert(
+                    "Delete Complete"
+                )
+            })
+        } else if (typeof route.params.has === "undefined") {
+            const data = {
+                id: auth.currentUser.uid,
+                name: route.params.title,
+                detail: route.params.detail,
+                ProductId: route.params.id,
+                rating: defaultRating,
+                picture: route.params.pic,
+                review: route.params.review,
+                telephone: route.params.telephone,
+                categories_name: route.params.categories_name,
+                has: 'มีแล้ว'
+            };
+    
+            console.log("data 159", data);
+            // console.log(data.get())
+            addDoc(collection(firestore, 'favorite'), data)
+                .then(() => {
+                    console.log('User fav added to Firestore');
+    
+                    alert("Add favorite secces")
+                })
+                .catch(error => {
+                    alert('error');
+                    console.error('Error adding user data to Firestore:', error);
+                });
+        }
+        
+    }
 
     const listenForRatingChanges = () => {
         const qComments = query(collection(firebase.firestore(), 'comments'));
@@ -310,13 +328,15 @@ const DetailScreen = ({ navigation, route }) => {
 
                     <Text>{route.params.review} รีวิว</Text>
 
-                    {/* <View style={styles.fav} onPress={addfav}>
-                        <Fontisto name="favorite" size={24} color="black" />
+                    {/* <View style={styles.fav}>
+                        <Fontisto name="favorite" size={24} color="black" onPress={addfav} />
                         <Text>ชื่นชอบ</Text>
                     </View> */}
-                    {/* <Pressable style={styles.submit} onPress={addfav}>
-                        <Text>fav</Text>
-                    </Pressable> */}
+                    <Pressable style={styles.fav} onPress={addfav}>
+                        {/* <Text>fav</Text> */}
+                        <Fontisto name="favorite" size={24} color="black" onPress={addfav} />
+                        <Text>ชื่นชอบ</Text>
+                    </Pressable>
 
                 </View>
                 <Text style={{ marginTop: 10, color: "gray" }}>{route.params.categories_name}</Text>

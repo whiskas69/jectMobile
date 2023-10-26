@@ -6,10 +6,10 @@ import { AntDesign } from "@expo/vector-icons";
 import { collection, query, orderBy, getDocs, QuerySnapshot, onSnapshot, where } from 'firebase/firestore';
 
 import ShowProduct from '../../components/ShowProduct';
-import Carousel from '../../components/RestaurantCarousel';
 import RestaurantItem from "../../components/RestaurantItem";
 
-const InterestScreen = ({ navigation, route }, props) => {
+
+const NewScreen = ({ navigation, route }, props) => {
     const [categoryData, setCategoryData] = useState("");
     const [datasort, setDatasort] = useState("");
     const [cate, setCate] = useState("");
@@ -21,7 +21,6 @@ const InterestScreen = ({ navigation, route }, props) => {
 
         const q = query(collection(firebase.firestore(), "Restaurant"),
         where("categg", "==", "noodle"));
-        
         const querySnapshot = await getDocs(q);
         const restaurantData = [];
         const restaurantAll = [];
@@ -136,7 +135,7 @@ const InterestScreen = ({ navigation, route }, props) => {
             <RestaurantItem
                 title={itemData.item.name}
                 pic={itemData.item.picture}
-                review={itemData.item.review}
+                rating={itemData.item.rating}
                 categories_name={itemData.item.categories_name}
                 telephone={itemData.item.telephone}
 
@@ -152,7 +151,7 @@ const InterestScreen = ({ navigation, route }, props) => {
             <ShowProduct
                 title={itemData.item.name}
                 pic={itemData.item.picture}
-                review={itemData.item.review}
+                rating={itemData.item.rating}
                 categories_name={itemData.item.categories_name}
                 telephone={itemData.item.telephone}
 
@@ -240,4 +239,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default InterestScreen;
+export default NewScreen;

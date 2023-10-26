@@ -44,8 +44,8 @@ const comment = (props) => {
                 </View>
                 <View style={{ borderTopWidth: 1, borderColor: 'gray', marginTop: 20, marginHorizontal: 20 }}>
                 </View>
-                <View style={styles.account}>
-                    <Text style={{ fontSize: 16, marginLeft: 20, marginTop: 20}}>{props.item.comment}</Text>
+                <View style={styles.accounts}>
+                    <Text style={{ fontSize: 16, marginLeft: 20, marginTop: 20, width:"100%"}}>{props.item.comment}</Text>
                 </View>
             </View>
         </View>

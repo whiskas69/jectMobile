@@ -89,7 +89,7 @@ const HomeScreen = ({ navigation, route }, props) => {
 
     useEffect(() => {
 
-        const q = query(collection(firebase.firestore(), 'Restaurant'), orderBy('review', 'desc'));
+        const q = query(collection(firebase.firestore(), 'Restaurant'), orderBy('rating', 'desc'));
         // Create a real-time listener to fetch and update data
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const restaurantData = [];
@@ -202,12 +202,12 @@ const HomeScreen = ({ navigation, route }, props) => {
             <Carousel
                 title={itemData.item.name}
                 pic={itemData.item.picture}
-                review={itemData.item.review}
+                rating={itemData.item.rating}
                 categories_name={itemData.item.categories_name}
                 telephone={itemData.item.telephone}
 
                 onSelectProduct={() => {
-                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, categories_name: itemData.item.categories_name, telephone: itemData.item.telephone  });
+                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, categories_name: itemData.item.categories_name, telephone: itemData.item.telephone });
                 }}
             />
         );
@@ -218,12 +218,12 @@ const HomeScreen = ({ navigation, route }, props) => {
             <ShowProduct
                 title={itemData.item.name}
                 pic={itemData.item.picture}
-                review={itemData.item.review}
+                rating={itemData.item.rating}
                 categories_name={itemData.item.categories_name}
                 telephone={itemData.item.telephone}
 
                 onSelectProduct={() => {
-                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, categories_name: itemData.item.categories_name, telephone: itemData.item.telephone  });
+                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, categories_name: itemData.item.categories_name, telephone: itemData.item.telephone,has: "มีแล้ว"    });
                 }}
             />
         )

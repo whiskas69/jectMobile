@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, View, Image, StyleSheet, TouchableOpacity, FlatList } from "react-native";
+import { FontAwesome, Fontisto } from '@expo/vector-icons';
 // import { FlatList } from "react-native-gesture-handler";
 
 const Carousel = (props) => {
@@ -14,7 +15,9 @@ const Carousel = (props) => {
                         <Text style={{ fontSize: 12, fontWeight: 'bold', marginLeft: 10 }}>{props.title}</Text>
                         <Text style={{ fontSize: 11, color: 'gray', marginLeft: 10 }}>{props.categories_name}</Text>
                     </View>
-                    <Text style={styles.review}>{props.review} รีวิว</Text>
+                    <Text style={styles.review}>
+                        เรตติ้ง {props.rating}
+                    </Text>
                 </View>
             </View>
         </TouchableOpacity>

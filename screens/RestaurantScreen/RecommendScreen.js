@@ -34,7 +34,7 @@ const RecommendScreen = ({ navigation, route }, props) => {
                     detail: dataPro.detail,
                     picture: dataPro.picture,
                     rating: dataPro.rating,
-                    review: dataPro.review,
+                    rating: dataPro.rating,
                     telephone: dataPro.telephone,
                     categories_name: dataPro.categories_name
                 }
@@ -49,7 +49,7 @@ const RecommendScreen = ({ navigation, route }, props) => {
                     detail: dataPro.detail,
                     picture: dataPro.picture,
                     rating: dataPro.rating,
-                    review: dataPro.review,
+                    rating: dataPro.rating,
                     telephone: dataPro.telephone,
                     categories_name: dataPro.categories_name
                 }
@@ -86,7 +86,7 @@ const RecommendScreen = ({ navigation, route }, props) => {
 
     useEffect(() => {
 
-        const n = query(collection(firebase.firestore(), 'Restaurant'), orderBy('review', 'desc'));
+        const n = query(collection(firebase.firestore(), 'Restaurant'), orderBy('rating', 'desc'));
         // Create a real-time listener to fetch and update data
         const unsubscribe = onSnapshot(n, (snapshot) => {
             const restaurantData = [];
@@ -131,7 +131,7 @@ const RecommendScreen = ({ navigation, route }, props) => {
             <RestaurantItem
                 title={itemData.item.name}
                 pic={itemData.item.picture}
-                review={itemData.item.review}
+                rating={itemData.item.rating}
                 categories_name={itemData.item.categories_name}
                 telephone={itemData.item.telephone}
 
@@ -147,7 +147,7 @@ const RecommendScreen = ({ navigation, route }, props) => {
             <ShowProduct
                 title={itemData.item.name}
                 pic={itemData.item.picture}
-                review={itemData.item.review}
+                rating={itemData.item.rating}
                 categories_name={itemData.item.categories_name}
                 telephone={itemData.item.telephone}
 

@@ -11,8 +11,7 @@ const ProfileScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [historyData, setHistoryData] = useState([]);
 
-  console.log("############################### editUser page ###############################")
-  console.log("lloooooooooo:", auth.currentUser)
+  console.log("############################### HiSHISHIS page ###############################")
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -24,7 +23,6 @@ const ProfileScreen = ({ navigation }) => {
           const userDataRef = onSnapshot(q, (querySnapshot) => {
             const userData = querySnapshot.docs[0].data();
             setData([userData]);
-            console.log("dataaaa", userData)
           });
 
           const historyDataRef = onSnapshot(history, (historySnapshot) => {

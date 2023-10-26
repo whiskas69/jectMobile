@@ -3,8 +3,7 @@ import { Alert ,View, Text, StyleSheet, Image, TouchableOpacity } from "react-na
 
 const RestaurantItem = (props) => {
     return (
-        <View style={styles.container}>
-            <TouchableOpacity style={styles.cardContainer}>
+            <TouchableOpacity style={styles.cardContainer} onPress={props.onSelectProduct}>
                 <View style={styles.card}>
                     <View style={styles.Imagebox}>
                         <Image source={{ uri: props.pic }}
@@ -16,11 +15,10 @@ const RestaurantItem = (props) => {
                             <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 10 }}>{props.title}</Text>
                             <Text style={{ fontSize: 13, color: 'gray', marginLeft: 10 }}>{props.categories_name}</Text>
                         </View>
-                        <Text style={{ fontSize: 15, height: 30, width: 60, alignItems: 'center' }}>{props.review} รีวิว</Text>
+                        <Text style={{ fontSize: 15, height: 30, width: 60, alignItems: 'center' }}>เรตติ้ง {props.rating}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
-        </View>
     );
 };
 
@@ -30,20 +28,21 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
     },
     card: {
-        width: 370,
+        width: "100%",
         height: 180,
         backgroundColor: "#FFFFFF",
         borderRadius: 20,
+
     },
     Imagebox: {
-        width: 370,
+        width: "100%",
         height: 120,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         overflow: 'hidden'
     },
     Image: {
-        width: 370,
+        width: "100%",
         height: 120,
         resizeMode: 'cover'
     },

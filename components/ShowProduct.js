@@ -17,7 +17,7 @@ const ShowProduct = (props) => {
                             fontSize: 16, bottom: -50, position: "absolute", left: 5
                         }}>{props.categories_name}</Text>
 
-                        <Text style={styles.review}>{props.review} รีวิว</Text>
+                        <Text style={styles.review}>เรตติ้ง {props.rating}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         maxHeight: 100,
         minHeight: 100,
-        borderRadius: 20
+        borderRadius: 20,
+        marginBottom: 20
     },
     catTitle: {
         marginTop: 10,

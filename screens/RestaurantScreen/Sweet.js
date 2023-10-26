@@ -136,7 +136,7 @@ const InterestScreen = ({ navigation, route }, props) => {
             <RestaurantItem
                 title={itemData.item.name}
                 pic={itemData.item.picture}
-                review={itemData.item.review}
+                rating={itemData.item.rating}
                 categories_name={itemData.item.categories_name}
                 telephone={itemData.item.telephone}
 
@@ -152,7 +152,7 @@ const InterestScreen = ({ navigation, route }, props) => {
             <ShowProduct
                 title={itemData.item.name}
                 pic={itemData.item.picture}
-                review={itemData.item.review}
+                rating={itemData.item.rating}
                 categories_name={itemData.item.categories_name}
                 telephone={itemData.item.telephone}
 

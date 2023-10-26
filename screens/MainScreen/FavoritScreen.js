@@ -1,77 +1,243 @@
-import React, { Component } from "react";
-import { Text, View, StyleSheet, ScrollView } from "react-native";
-import { firebase, auth, firestore } from "../../database/firebaseDB";
+import React, { Component, useState, useEffect } from "react";
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput, FlatList } from "react-native";
+import { firebase, firestore } from "../../database/firebaseDB";
+import { AntDesign } from "@expo/vector-icons";
 
-import RestaurantItem from "../../components/RestaurantfavItem ";
+import { collection, query, orderBy, getDocs, QuerySnapshot, onSnapshot } from 'firebase/firestore';
 
-class FavoriteScreen extends Component {
-    constructor() {
-        super();
+import ShowProduct from '../../components/ShowProduct';
+import RestaurantItem from "../../components/RestaurantfavItem "
 
-        this.favCollection = firebase.firestore().collection("Favorite");
 
-        this.state = {
-            favorite_list: [],
-        };
+const FavoriteSceen = ({ navigation, route }, props) => {
+    const [categoryData, setCategoryData] = useState("");
+    const [datasort, setDatasort] = useState("");
+    const [cate, setCate] = useState("");
+    const [searchText, setSearchText] = useState('');
+    const [showView, setShowView] = useState(false);
+
+    //search
+    const SearchData = async () => {
+
+        const q = query(collection(firebase.firestore(), "favorite"));
+        const querySnapshot = await getDocs(q);
+        const restaurantData = [];
+        const restaurantAll = [];
+        var i;
+
+        for (i = 0; i < querySnapshot.size; i++) {
+            const restaurant = querySnapshot.docs[i].data().category;
+            if (restaurant === cate) {
+
+                const dataPro = querySnapshot.docs[i].data();
+                const dataAll = {
+                    id: querySnapshot.docs[i].id,
+                    name: dataPro.name,
+                    detail: dataPro.detail,
+                    ProductId: dataPro.ProductId,
+                    rating: dataPro.rating,
+                    picture: dataPro.picture,
+                    review: dataPro.review,
+                    telephone: dataPro.telephone,
+                    categories_name: dataPro.categories_name
+                }
+                restaurantData.push(dataAll);
+            }
+
+            else {
+                const dataPro = querySnapshot.docs[i].data();
+                const dataAll = {
+                    id: querySnapshot.docs[i].id,
+                    name: dataPro.name,
+                    detail: dataPro.detail,
+                    ProductId: dataPro.ProductId,
+                    rating: dataPro.rating,
+                    picture: dataPro.picture,
+                    review: dataPro.review,
+                    telephone: dataPro.telephone,
+                    categories_name: dataPro.categories_name
+                }
+                restaurantAll.push(dataAll)
+            }
+        }
+
+
+        if (restaurantAll.length == querySnapshot.size) {
+            const filteredData = restaurantAll.filter(item =>
+                item.name.toLowerCase().includes(searchText.toLowerCase())
+            );
+            setCategoryData(filteredData)
+        }
+
+        else {
+            const filteredData = restaurantData.filter(item =>
+                item.name.toLowerCase().includes(searchText.toLowerCase())
+            );
+            setCategoryData(filteredData)
+        }
+
+        console.log('filter', categoryData);
+        console.log('searchtext', searchText)
+
+        if (categoryData == "" || searchText == "") {
+            console.log("1")
+            setShowView(false);
+        } else if (categoryData != "") {
+            setShowView(true);
+            console.log("2")
+        }
     }
 
-    getCollection = (querySnapshot) => {
-        const all_data = [];
-        querySnapshot.forEach((res) => {
-            const { id, name, category_name, review, detail, category_id, picture, rating, telephone } = res.data();
+    useEffect(() => {
 
-            all_data.push({
-                key: res.id,
-                id,
-                name,
-                category_name,
-                review,
-                detail,
-                category_id,
-                picture,
-                rating,
-                telephone
+        const n = query(collection(firebase.firestore(), 'favorite'));
+        // Create a real-time listener to fetch and update data
+        const unsubscribe = onSnapshot(n, (snapshot) => {
+            const restaurantData = [];
+            const restaurantAll = [];
+
+            snapshot.forEach((doc) => {
+                const dataPro = doc.data();
+                const dataAll = {
+                    id: doc.id,
+                    name: dataPro.name,
+                    detail: dataPro.detail,
+                    ProductId: dataPro.ProductId,
+                    rating: dataPro.rating,
+                    picture: dataPro.picture,
+                    review: dataPro.review,
+                    telephone: dataPro.telephone,
+                    categories_name: dataPro.categories_name
+                };
+                if (dataPro.category === cate) {
+                    restaurantData.push(dataAll);
+                } else {
+                    restaurantAll.push(dataAll);
+                }
             });
+
+            if (restaurantAll.length === snapshot.size) {
+                setDatasort(restaurantAll);
+            } else {
+                setDatasort(restaurantData);
+            }
         });
 
-        this.setState({
-            favorite_list: all_data,
-        });
-    };
+        return () => {
+            // Unsubscribe from the real-time listener when the component unmounts
+            unsubscribe();
+        };
 
-    componentDidMount() {
-        this.unsubscribe = this.favCollection.onSnapshot(this.getCollection);
-    }
+    }, [cate])
 
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
 
-    navigateToViewDetaile = (item) => {
-        this.props.navigation.navigate("Restaurant Detail", { key: item });
-    };
-
-    render() {
+    const renderedItem = (itemData) => {
         return (
-            <View style={styles.container}>
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    {this.state.favorite_list.map((item, i) => {
-                        return (
-                            <RestaurantItem key={i} list={item} />
-                        )
-                    })}
-                </ScrollView>
-            </View>
+            <RestaurantItem
+                title={itemData.item.name}
+                pic={itemData.item.picture}
+                review={itemData.item.review}
+                categories_name={itemData.item.categories_name}
+                telephone={itemData.item.telephone}
+
+                onSelectProduct={() => {
+                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, categories_name: itemData.item.categories_name, telephone: itemData.item.telephone, has: "ไม่อยากมี" });
+                }}
+            />
         );
     }
+
+    const rendersearch = (itemData) => {
+        return (
+            <ShowProduct
+                title={itemData.item.name}
+                pic={itemData.item.picture}
+                review={itemData.item.review}
+                categories_name={itemData.item.categories_name}
+                telephone={itemData.item.telephone}
+
+                onSelectProduct={() => {
+                    navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, categories_name: itemData.item.categories_name, telephone: itemData.item.telephone, has: "ไม่อยากมี" });
+                }}
+            />
+        )
+    }
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.input} >
+                <TextInput style={{ width: '100%' }} placeholder="ค้นหา" onChangeText={text => setSearchText(text)} value={searchText} />
+                <AntDesign style={styles.searchIcon} name="search1" size={26} color={'gray'} onPress={() => SearchData(cate)} />
+            </View>
+            <ScrollView>
+                {showView && ( // สร้าง View จาก showView ถ้าค่าเป็น true
+                    <FlatList
+                        data={categoryData}
+                        renderItem={rendersearch}
+                    />
+                )}
+                <ScrollView>
+                    <FlatList
+                        data={datasort}
+                        renderItem={renderedItem}
+
+                    />
+                </ScrollView>
+            </ScrollView>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F4EEEE',
-        marginTop: 10
+        marginRight: 10,
+        marginLeft: 10
+    },
+    input: {
+        // borderColor: "gray",
+        width: "100%",
+        // borderWidth: 1,
+        borderRadius: 20,
+        marginVertical: 10,
+        padding: 10,
+        flexDirection: 'row',
+        backgroundColor: '#D9D9D9',
+        alignItems: 'center',
+    },
+    searchIcon: {
+        padding: 5,
+        position: 'absolute',
+        top: 0,
+        right: 5,
+    },
+    containercard: {
+        flexDirection: 'column',
+        flexWrap: 'wrap'
+    },
+    card: {
+        width: 370,
+        height: 180,
+        backgroundColor: "#FFFFFF",
+        borderRadius: 20,
+    },
+    Imagebox: {
+        width: 370,
+        height: 120,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        overflow: 'hidden'
+    },
+    Image: {
+        width: 370,
+        height: 120,
+        resizeMode: 'cover'
+    },
+    cardContainer: {
+        marginLeft: 12,
+        marginBottom: 10
     }
 });
 
-export default FavoriteScreen;
+export default FavoriteSceen;

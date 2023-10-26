@@ -190,6 +190,12 @@ function FavoriteNavigation() {
                 options={{
                     title: "ร้านที่ชื่นชอบ"
                 }} />
+            <FavoriteNavigator.Screen
+            name="Detail"
+            component={DetailSceen}
+            options={{
+                title: "รายละเอียด"
+            }}/>
         </FavoriteNavigator.Navigator>
     )
 }
