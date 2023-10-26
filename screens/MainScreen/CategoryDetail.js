@@ -1,120 +1,166 @@
-import React, { Component } from "react";
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native";
-import { firebase, firestore } from "../../database/firebaseDB";
+// import React, { useState, useEffect } from "react";
+// import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput, FlatList } from "react-native";
+// import { firebase, firestore, auth } from "../../database/firebaseDB";
+// import { collection, query, orderBy, getDocs, QuerySnapshot, onSnapshot } from 'firebase/firestore';
+// import Carousel from "../../components/MenuCarousel";
 
-import Searchbar from "../../components/Searchbar";
+// //Restaurant
 
-class CateDetailScreen extends Component {
-    constructor() {
-        super();
+// const CateDetailScreen = () => {
+//     const [catagoryName, setCategoryName] = useState('');
+//     const [categoryData, setCategoryData] = useState("");
+//     const [datasort, setDatasort] = useState("");
+//     const [cate, setCate] = useState("");
+//     const [searchText, setSearchText] = useState('');
+//     const [showView, setShowView] = useState(false);
+//     const [name, setName] = useState('');
+//     const [picture, setPicture] = useState('');
+//     const [review, setReview] = useState('');
+//     const [categories_name, setCategories_name] = useState('');
 
-        this.inCollection = firebase.firestore().collection("Restaurant").orderBy("id", "asc");
+//     useEffect(() => {
+//         // const q = query(collection(firebase.firestore(), "Restaurant"));
+//         // Create a real-time listener to fetch and update data
 
-        this.state = {
-            CateDetail_list: [],
-        };
-    }
+//         const unsubscribe = onSnapshot(q, (snapshot) => {
+//             const restaurantData = [];
+//             const restaurantAll = [];
 
-    getCollection = (querySnapshot) => {
-        const all_data = [];
-        querySnapshot.forEach((res) => {
-            const { id, name, category_name, review, detail, category_id, picture, rating, telephone } = res.data();
+//             snapshot.forEach((doc) => {
+//                 const dataPro = doc.data();
+//                 if (dataPro.categories_name === datasort.categories_name) {
+//                     items.push({
+//                         name: dataPro.name,
+//                         picture: dataPro.picture,
+//                         review: dataPro.review,
+//                         categories_name: dataPro.categories_name
+//                     });
+//                 }
+//                 const dataAll = {
+//                     name: dataPro.name,
+//                     picture: dataPro.picture,
+//                     review: dataPro.review,
+//                     categories_name: dataPro.categories_name
+//                 };
+//                 setName(dataPro.name);
+//                 setPicture(dataPro.picture);
+//                 setReview(dataPro.review);
+//                 setCategories_name(dataPro.categories_name);
+            
+//                 if (dataPro.category === cate) {
+//                     restaurantData.push(dataAll);
+//                 } else {
+//                     restaurantAll.push(dataAll);
+//                 }
+//             });
+            
+//             if (restaurantAll.length === snapshot.size) {
+//                 setDatasort(restaurantAll);
+//             } else {
+//                 setDatasort(restaurantData);
+//             }
+                
 
-            all_data.push({
-                key: res.id,
-                id,
-                name,
-                category_name,
-                review,
-                detail,
-                category_id,
-                picture,
-                rating,
-                telephone
-            });
-        });
+//             if (restaurantAll.length === snapshot.size) {
+//                 setDatasort(restaurantAll);
+                
+//             } else {
+//                 setDatasort(restaurantData);
+//             }
+//         });
 
-        this.setState({
-            CateDetail_list: all_data,
-        });
-    };
+//         return () => {
+//             // Unsubscribe from the real-time listener when the component unmounts
+//             unsubscribe();
+//         };
 
-    componentDidMount() {
-        this.unsubscribe = this.inCollection.onSnapshot(this.getCollection);
-    }
+//     }, [cate])
+//     // console.log("rrrrrrrr", datasort)
+//     // console.log("rrrrrrrr", catagoryName)
 
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
+//     const renderedItem = (itemData) => {
+//         return (
+//             <Carousel
+//                 title={itemData.item.name}
+//                 pic={itemData.item.picture}
+//                 review={itemData.item.review}
+//                 categories_name={itemData.item.categories_name}
+//                 telephone={itemData.item.telephone}
 
-    navigateToViewDetaile = (item) => {
-        this.props.navigation.navigate("CateDetail", { key: item });
-    };
+//                 onSelectProduct={() => {
+//                     navigation.navigate("Detail", { title: itemData.item.name, pic: itemData.item.picture, detail: itemData.item.detail, id: itemData.item.id, rating: itemData.item.rating, review: itemData.item.review, categories_name: itemData.item.categories_name, telephone: itemData.item.telephone });
+//                 }}
+//             />
+//         );
+//     }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <Searchbar />
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    {this.state.CateDetail_list.map((item, i) => {
-                        return (
-                            <View style={styles.containercard} key={i}>
-                                <TouchableOpacity style={styles.cardContainer} onPress={() => this.navigateToViewDetaile(item.key)}>
-                                    <View style={styles.card}>
-                                        <View style={styles.Imagebox}>
-                                            <Image source={{ uri: item.picture }}
-                                                style={styles.Image}
-                                            />
-                                        </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
-                                            <View style={styles.maintext}>
-                                                <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 10 }}>{item.name}</Text>
-                                                <Text style={{ fontSize: 13, color: 'gray', marginLeft: 10 }}>{item.category_name}</Text>
-                                            </View>
-                                            <Text style={{ fontSize: 15, height: 30, width: 60, alignItems: 'center' }}>{item.review} รีวิว</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        )
-                    })}
-                </ScrollView>
-            </View>
-        );
-    }
-}
+//     return (
+//         <View style={styles.container}>
+//             <ScrollView>
+//                     <FlatList
+//                         data={datasort}
+//                         renderItem={renderedItem}
+                        
+//                     />
+//                 </ScrollView>
+//                 {/* {this.state.CateDetail_list.map((item, i) => {
+//                     return (
+//                         <View style={styles.containercard} key={i}>
+//                             <TouchableOpacity style={styles.cardContainer} onPress={() => this.navigateToViewDetaile(item.key)}>
+//                                 <View style={styles.card}>
+//                                     <View style={styles.Imagebox}>
+//                                         <Image source={{ uri: item.picture }}
+//                                             style={styles.Image}
+//                                         />
+//                                     </View>
+//                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+//                                         <View style={styles.maintext}>
+//                                             <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 10 }}>{item.name}</Text>
+//                                             <Text style={{ fontSize: 13, color: 'gray', marginLeft: 10 }}>{item.category_name}</Text>
+//                                         </View>
+//                                         <Text style={{ fontSize: 15, height: 30, width: 60, alignItems: 'center' }}>{item.review} รีวิว</Text>
+//                                     </View>
+//                                 </View>
+//                             </TouchableOpacity>
+//                         </View>
+//                     )
+//                 })} */}
+//         </View>
+//     );
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F4EEEE',
-    },
-    containercard: {
-        flexDirection: 'column',
-        flexWrap: 'wrap'
-    },
-    card: {
-        width: 370,
-        height: 180,
-        backgroundColor: "#FFFFFF",
-        borderRadius: 20,
-    },
-    Imagebox: {
-        width: 370,
-        height: 120,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        overflow: 'hidden'
-    },
-    Image: {
-        width: 370,
-        height: 120,
-        resizeMode: 'cover'
-    },
-    cardContainer: {
-        marginLeft: 12,
-        marginBottom: 10
-    }
-});
+// }
 
-export default CateDetailScreen;
+// const styles = StyleSheet.create({
+//     container: {
+//         flex: 1,
+//         backgroundColor: '#F4EEEE',
+//     },
+//     containercard: {
+//         flexDirection: 'column',
+//         flexWrap: 'wrap'
+//     },
+//     card: {
+//         width: 370,
+//         height: 180,
+//         backgroundColor: "#FFFFFF",
+//         borderRadius: 20,
+//     },
+//     Imagebox: {
+//         width: 370,
+//         height: 120,
+//         borderTopLeftRadius: 20,
+//         borderTopRightRadius: 20,
+//         overflow: 'hidden'
+//     },
+//     Image: {
+//         width: 370,
+//         height: 120,
+//         resizeMode: 'cover'
+//     },
+//     cardContainer: {
+//         marginLeft: 12,
+//         marginBottom: 10
+//     }
+// });
+
+// export default CateDetailScreen;

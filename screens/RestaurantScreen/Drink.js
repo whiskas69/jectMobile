@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, FlatList, ScrollView, Button, TouchableOpacity } from 'react-native';
+import React, { Component, useState, useEffect } from "react";
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput, FlatList } from "react-native";
+import { firebase, firestore } from "../../database/firebaseDB";
 import { AntDesign } from "@expo/vector-icons";
 
-import { firebase, auth, firestore } from '../../database/firebaseDB';
-import { collection, query, orderBy, getDocs, QuerySnapshot, onSnapshot } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, QuerySnapshot, onSnapshot, where } from 'firebase/firestore';
 
 import ShowProduct from '../../components/ShowProduct';
 import Carousel from '../../components/RestaurantCarousel';
+import RestaurantItem from "../../components/RestaurantItem";
 
-const HomeScreen = ({ navigation, route }, props) => {
+const InterestScreen = ({ navigation, route }, props) => {
     const [categoryData, setCategoryData] = useState("");
-    const [datarec, setDatarec] = useState("");
-    const [datanew, setDatanew] = useState("");
     const [datasort, setDatasort] = useState("");
     const [cate, setCate] = useState("");
     const [searchText, setSearchText] = useState('');
@@ -20,7 +19,9 @@ const HomeScreen = ({ navigation, route }, props) => {
     //search
     const SearchData = async () => {
 
-        const q = query(collection(firebase.firestore(), "Restaurant"));
+        const q = query(collection(firebase.firestore(), "Restaurant"),
+        where("categg", "==", "drink"));
+        
         const querySnapshot = await getDocs(q);
         const restaurantData = [];
         const restaurantAll = [];
@@ -89,73 +90,10 @@ const HomeScreen = ({ navigation, route }, props) => {
 
     useEffect(() => {
 
-        const q = query(collection(firebase.firestore(), 'Restaurant'), orderBy('review', 'desc'));
+        const n = query(collection(firebase.firestore(), "Restaurant"),
+        where("categg", "==", "drink"));
         // Create a real-time listener to fetch and update data
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const restaurantData = [];
-            const restaurantAll = [];
-
-            snapshot.forEach((doc) => {
-                const dataPro = doc.data();
-                const dataAll = {
-                    name: dataPro.name,
-                    id: doc.id,
-                    detail: dataPro.detail,
-                    picture: dataPro.picture,
-                    rating: dataPro.rating,
-                    review: dataPro.review,
-                    telephone: dataPro.telephone,
-                    categories_name: dataPro.categories_name,
-                };
-                if (dataPro.category === cate) {
-                    restaurantData.push(dataAll);
-                } else {
-                    restaurantAll.push(dataAll);
-                }
-            });
-
-            if (restaurantAll.length === snapshot.size) {
-                setDatarec(restaurantAll);
-            } else {
-                setDatarec(restaurantData);
-            }
-        });
-
-        const m = query(collection(firebase.firestore(), 'Restaurant'));
-        // Create a real-time listener to fetch and update data
-        const unsubscribe2 = onSnapshot(m, (snapshot) => {
-            const restaurantData = [];
-            const restaurantAll = [];
-
-            snapshot.forEach((doc) => {
-                const dataPro = doc.data();
-                const dataAll = {
-                    name: dataPro.name,
-                    id: doc.id,
-                    detail: dataPro.detail,
-                    picture: dataPro.picture,
-                    rating: dataPro.rating,
-                    review: dataPro.review,
-                    telephone: dataPro.telephone,
-                    categories_name: dataPro.categories_name
-                };
-                if (dataPro.category === cate) {
-                    restaurantData.push(dataAll);
-                } else {
-                    restaurantAll.push(dataAll);
-                }
-            });
-
-            if (restaurantAll.length === snapshot.size) {
-                setDatanew(restaurantAll);
-            } else {
-                setDatanew(restaurantData);
-            }
-        });
-
-        const n = query(collection(firebase.firestore(), 'Restaurant'), orderBy('name', 'asc'));
-        // Create a real-time listener to fetch and update data
-        const unsubscribe3 = onSnapshot(n, (snapshot) => {
+        const unsubscribe = onSnapshot(n, (snapshot) => {
             const restaurantData = [];
             const restaurantAll = [];
 
@@ -183,15 +121,11 @@ const HomeScreen = ({ navigation, route }, props) => {
             } else {
                 setDatasort(restaurantData);
             }
-
-            console.log('cate', restaurantAll)
         });
 
         return () => {
             // Unsubscribe from the real-time listener when the component unmounts
             unsubscribe();
-            unsubscribe2();
-            unsubscribe3();
         };
 
     }, [cate])
@@ -199,7 +133,7 @@ const HomeScreen = ({ navigation, route }, props) => {
 
     const renderedItem = (itemData) => {
         return (
-            <Carousel
+            <RestaurantItem
                 title={itemData.item.name}
                 pic={itemData.item.picture}
                 review={itemData.item.review}
@@ -242,33 +176,11 @@ const HomeScreen = ({ navigation, route }, props) => {
                         renderItem={rendersearch}
                     />
                 )}
-
-                <Text style={styles.textmain} onPress={() => { navigation.navigate("Recommend") }} >ร้านอาหารยอดนิยม {'>'}</Text>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    <FlatList
-                        data={datarec}
-                        renderItem={renderedItem}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                    />
-                </ScrollView>
-                <Text style={styles.textmain} onPress={() => { navigation.navigate("New") }} >ร้านอาหารใหม่ {'>'}</Text>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    <FlatList
-                        data={datanew}
-                        renderItem={renderedItem}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                    />
-                </ScrollView>
-                {/* datasort */}
-                <Text style={styles.textmain} onPress={() => { navigation.navigate("Interest") }} >ร้านอาหารตามตัวอักษร {'>'}</Text>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <ScrollView>
                     <FlatList
                         data={datasort}
                         renderItem={renderedItem}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
+                        
                     />
                 </ScrollView>
             </ScrollView>
@@ -282,16 +194,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#F4EEEE',
         marginRight: 10,
         marginLeft: 10
-    },
-    textmain: {
-        marginLeft: 20,
-        marginTop: 10,
-        marginBottom: 10,
-        fontSize: 20
-    },
-    cat: {
-        alignItems: 'center',
-        marginRight: 10
     },
     input: {
         // borderColor: "gray",
@@ -310,24 +212,32 @@ const styles = StyleSheet.create({
         top: 0,
         right: 5,
     },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        textAlign: 'left'
+    containercard: {
+        flexDirection: 'column',
+        flexWrap: 'wrap'
     },
-    catagory: {
-        width: 40,
-        height: 40,
-        borderRadius: 10,
-
+    card: {
+        width: 370,
+        height: 180,
+        backgroundColor: "#FFFFFF",
+        borderRadius: 20,
     },
-    catTitle: {
-        fontSize: 14,
-        fontWeight: 'light',
-        marginHorizontal: 10,
-        marginTop: 5
+    Imagebox: {
+        width: 370,
+        height: 120,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        overflow: 'hidden'
     },
+    Image: {
+        width: 370,
+        height: 120,
+        resizeMode: 'cover'
+    },
+    cardContainer: {
+        marginLeft: 12,
+        marginBottom: 10
+    }
 });
 
-
-export default HomeScreen;
+export default InterestScreen;

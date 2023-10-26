@@ -18,9 +18,14 @@ import EditProfileScreen from "../screens/ProfileScreen/EditProfileScreen"
 import ChangPassword from "../screens/ProfileScreen/ChangePasswordScreen"
 import DetailSceen from "../screens/MainScreen/Detail";
 import Categories from "../screens/MainScreen/CategoryScreen";
-import CateDetailScreen from "../screens/MainScreen/CategoryDetail";
 import AddRestScreen from "../screens/ProfileScreen/AddRestScreen";
-import FavoriteSceen from "../screens/MainScreen/FavoritScreen"
+import FavoriteSceen from "../screens/MainScreen/FavoritScreen";
+import CookedToOrder from "../screens/RestaurantScreen/CookedToOrder"
+import Drink from "../screens/RestaurantScreen/Drink";
+import Noodle from "../screens/RestaurantScreen/Noodle";
+import PorkPanAndShabu from "../screens/RestaurantScreen/PorkPanAndShabu";
+import Snack from "../screens/RestaurantScreen/Snack.js";
+import Sweet from "../screens/RestaurantScreen/Sweet.js";
 
 const HomeNavigator = createNativeStackNavigator();
 const CategoryNavigator = createNativeStackNavigator();
@@ -123,12 +128,49 @@ function CategoryNavigation() {
                 options={{
                     title: "หมวดหมู่"
                 }} />
-                <CategoryNavigator.Screen
-                name="CateDetail"
-                component={CateDetailScreen}
+
+            <CategoryNavigator.Screen
+                name="CookedToOrder"
+                component={CookedToOrder}
                 options={{
-                    title: "หน้าหลัก"
-                }} />
+                    title: "อาหารตามสั่ง"
+                }} 
+            />
+            <CategoryNavigator.Screen
+                name="Drink"
+                component={Drink}
+                options={{
+                    title: "เครื่องดื่ม"
+                }} 
+            />
+            <CategoryNavigator.Screen
+                name="Noodle"
+                component={Noodle}
+                options={{
+                    title: "ก๋วยเตี๋ยว"
+                }} 
+            />
+            <CategoryNavigator.Screen
+                name="PorkPanAndShabu"
+                component={PorkPanAndShabu}
+                options={{
+                    title: "หมูกะทะ และชาบู"
+                }} 
+            />
+            <CategoryNavigator.Screen
+                name="Snack"
+                component={Snack}
+                options={{
+                    title: "ของกินเล่น"
+                }} 
+            />
+            <CategoryNavigator.Screen
+                name="Sweet"
+                component={Sweet}
+                options={{
+                    title: "ของหวาน"
+                }} 
+            />
         </CategoryNavigator.Navigator>
     );
 }

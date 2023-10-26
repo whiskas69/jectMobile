@@ -113,7 +113,7 @@ const EditUser = ({ navigation }) => {
             <View style={styles.container}>
             <ImageBackground
                         source={profile ? { uri: profile.uri } : null}
-                        style={{ resizeMode: 'cover', marginLeft: 20, marginTop: 150, width: 200, height: 200,  }}
+                        style={{ resizeMode: 'cover', marginLeft: 20, marginTop: 100, width: 200, height: 200,  }}
                         // style={styles.backgroundImage}
                         >
                         <TouchableOpacity style={[styles.selectImage, { marginTop: 20, marginBottom: 10, }]}onPress={pickImage}></TouchableOpacity>
