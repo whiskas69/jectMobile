@@ -3,48 +3,51 @@ import { AntDesign } from "@expo/vector-icons";
 import { responsiveHeight, responsiveWidth } from "react-native-responsive-dimensions";
 
 const comment = (props) => {
+    console.log("pyt", props)
     const starIcons = [];
-  
+
     // Use a for loop to generate the star icons
     for (let i = 0; i < 5; i++) {
 
-        if(i < props.item.rating){
+        if (i < props.item.rating) {
             starIcons.push(
-              <AntDesign key={i} name="star" size={16} color="orange" />
-              
+                <AntDesign key={i} name="star" size={16} color="orange" />
+
             );
 
         }
 
-        else{
+        else {
             starIcons.push(
-              <AntDesign key={i} name="star" size={16} color="grey" />
+                <AntDesign key={i} name="star" size={16} color="grey" />
 
             )
         }
     }
 
-    
-   
+
+
     return (
-        <View style={{ borderBottomColor: '#aaa', borderBottomWidth: 1, paddingVertical: 10 }}>
-            <View style={{ paddingVertical: 7, flexDirection: 'row', alignItems: 'center', columnGap: 10, marginTop: 10 }}>
-                <Image
-                    source={{ uri: 'https://picsum.photos/200' }}
-                    style={[styles.account, { marginTop: 10 }]} />
-                <Text style={{ fontSize: 16, fontWeight: '400', }}> {props.item.name}{'\n'}
-                    <View style={{ flexDirection: 'row', marginTop: 5, }}>
-
-                    
-                    {starIcons} 
-                        <Text style={{ fontSize: 16, bottom: 0 }}> {props.item.time} </Text>
+        <View style={{ marginVertical: 10}}>
+            <View style={styles.container}>
+                <View style={{ flexDirection: "row", marginTop: 20 }}>
+                    <Image source={{ uri: props.item.imageProfile }} style={[styles.account]} />
+                    <View>
+                        <Text style={{ fontSize: 16, marginTop: 5, marginLeft: 10 }}>{props.item.name}</Text>
+                        <View>
+                            <View style={{ flexDirection: "row", marginLeft: 10 }}>{starIcons}</View>
+                        </View>
                     </View>
-                </Text>
-
+                    <View>
+                        <Text style={{ marginLeft: 70, marginTop: 25 }}>{props.item.time}</Text>
+                    </View>
+                </View>
+                <View style={{ borderTopWidth: 1, borderColor: 'gray', marginTop: 20, marginHorizontal: 20 }}>
+                </View>
+                <View style={styles.account}>
+                    <Text style={{ fontSize: 16, marginLeft: 20, marginTop: 20}}>{props.item.comment}</Text>
+                </View>
             </View>
-            <Text style={styles.content}>
-                {props.item.comment}
-            </Text>
         </View>
     );
 };
@@ -52,11 +55,22 @@ const comment = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        // margin: 10,
-        paddingTop: 30
+        // padding: 35,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        paddingBottom: 20
+    },
+    review: {
+        borderRadius: 10,
+        padding: 10,
+        backgroundColor: 'white',
+        margin: 10,
+    },
+    account: {
+        width: responsiveWidth(10),
+        height: responsiveWidth(10),
+        borderRadius: 50,
+        marginLeft: 20,
     },
     content: {
         paddingHorizontal: '19%',
@@ -66,12 +80,6 @@ const styles = StyleSheet.create({
         lineHeight: 20,
         fontFamily: 'Anuphan'
 
-    },
-    account: {
-        width: responsiveWidth(10),
-        height: responsiveWidth(10),
-        borderRadius: 50,
-        marginLeft: 20,
     },
 });
 
